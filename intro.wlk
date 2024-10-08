@@ -1,5 +1,5 @@
 import wollok.game.*
-import nivel1.*
+import nivelesJoni.*
 
 object mensajeInicio {
   method position() = game.at(5,5) //se mide en celdas de 50 x 50px
@@ -41,8 +41,8 @@ object primeraPantalla {
       game.removeVisual(mensajeInicio)
       game.removeVisual(fondo0)
       self.deshabilitador()
-      jugarla1.habilitador()
-      jugarla1.jugar() 
+      niveles.habilitador()
+      niveles.nivelSW() 
     }
   }
 //////////

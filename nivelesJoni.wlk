@@ -1,16 +1,38 @@
-/*import miscelaneos.*
+import miscelaneos.*
 import wollok.game.*
 import player.*
-*/
 
-object suelo {
-  method image() = "fondo1.jpg"
+class Suelo {
+  method image()
   method position() = game.origin()
 }
+//////////////////////////////////////////////
+object suelo inherits Suelo{
+  override method image() = "fondo1.jpg"
+}
+object fondo2 inherits Suelo{
+  override method image() = "fondo0.jpg"
+}
+///////////////////////////////////////////////
+//////////COSAS DE STAR WARS//////////
+object fondo1 inherits Suelo{
+  override method image() = "espacio.png"
+}
+object gonza {
+  method image () = "gonza.png"
+  var property position = game.at(3,-15)
+  
+  method desplazamiento(){
+  	const y = (position.y()+1)
+		position = game.at(position.x(),y)
+		
+	}
+}
+//////////////////////////////////////////////
 class Portales {
   var image = "portal0.png"
   var position
-  var property mapa = jugarla2.jugar()
+  var property mapa = niveles.nivel3()
 
   method image () = image
   method position() = position
@@ -28,7 +50,7 @@ class Portales {
 	}
 }
 
-const portal = new Portales(position = game.at(0,5))
+const portal = new Portales(position = game.at(0,5) )
 const portal2 = new Portales(position = game.at(11,5))
 
 class Armas {
@@ -95,29 +117,63 @@ const placa1 = new Placas (position = game.at(1,11), image = "placa0.png")
 const placa2 = new Placas (position = game.at(2,11), image = "placa0.png")
 const placa3 = new Placas (position = game.at(3,11), image = "placa0.png")
 
-object jugarla {
+object niveles {
   const ancho = 12 //se mide en celdas de 50 x 50px
   const alto = 12  //se mide en celdas de 50 x 50px
 
-/////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
   var property habilitado = false
-
+  
   method habilitador(){
-    habilitado = true
+    habilitado = true }
+
+  method deshabilitador(){
+    habilitado = false }
+  
+  method nivelSW(){
+    config.removerVisuales()
+
+    // Sonido SW
+    const sw = game.sound("sw.mp3")
+    sw.shouldLoop(true)
+    sw.play()
+
+    game.addVisual(fondo1)
+    game.title("Star Wars")
+    game.height(alto) 
+	game.width(ancho)
+    game.addVisual(mensajeSW)
+    game.addVisual(gonza)
+    
+    game.onTick(1700, "IntroSW",{ mensajeSW.desplazamiento() })
+    game.onTick(1700, "IntroSW",{ gonza.desplazamiento() })
+
+    keyboard.o().onPressDo({ sw.stop();
+                            self.corroboro() })
+    
   }
 
-    method deshabilitador(){
-    habilitado = false
+  method corroboro(){
+    if (habilitado){
+      game.removeTickEvent("IntroSW")
+      self.deshabilitador()
+      //niveles.habilitador()
+      self.nivel1()
+    }
   }
-/////////////////////
-  method jugar() {
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+  method nivel1() {
 
       config.removerVisuales()
 
       game.addVisual(suelo)
       game.title("Pickle Rick")
-      game.height(alto) 
-      game.width(ancho)
+      //game.height(alto) 
+      //game.width(ancho)
       game.addVisual(portal)
       game.addVisual(portal2)
       game.addVisual(arma)
@@ -138,117 +194,21 @@ object jugarla {
       
       config.configurarColisiones()
 
-      
   //////////////////////////////////////////////////
-      config.textoCharlado(4000,7000, inventario)
+      //EJEMPLO DE CHARLA CUANDO INICIA EL NIVEL
 
-      config.textoCharlado(7000,10000,saludo2)
-
-      //Paso a siguiente "jugar" junto con corroboro()
-      //keyboard.p().onPressDo({ jugarla1.jugar0() })
+      //config.textoCharlado(4000,7000, inventario)
+      //config.textoCharlado(7000,10000,saludo2)
     
   }
- 
-  /*method corroboro{
-    if (habilitado){
-
-    }
-  }*/
-//////////////////////////////////////////////////
-
-}/*class Suelo {
-  method image()
-  method position() = game.origin()
-}
-object suelo inherits Suelo{
-  override method image() = "fondo1.jpg"
-}
-*/
-
-//////////ESTE ESJEMPLO ESTA PARA LO DE STAR WARS//////////
-object fondo1 {
-  ///Esto se remplaza por clase Suelo
-  method image() = "espacio.png"
-  method position() = game.origin()
-}
-object gonza {
-  method image () = "gonza.png"
-  var property position = game.at(3,-15)
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
   
-  method gravedad(){
-  	const y = (position.y()+1)
-		position = game.at(position.x(),y)
-		
-	}
-}
-object jugarla1 {
-
-  const ancho = 12 //se mide en celdas de 50 x 50px
-  const alto = 12  //se mide en celdas de 50 x 50px
-  var property habilitado = false
-
-  method habilitador(){
-    habilitado = true
-  }
-
-  method deshabilitador(){
-    habilitado = false
-  }
-  
-  method jugar(){
-    config.removerVisuales()
-    const sw = game.sound("sw.mp3")
-    sw.shouldLoop(true)
-    sw.play()
-
-    game.addVisual(fondo1)
-    game.title("Star Wars")
-    game.height(alto) 
-	  game.width(ancho)
-    game.addVisual(mensajeSW)
-    game.addVisual(gonza)
-    
-    game.onTick(1700, "IntroSW",{ mensajeSW.gravedad() })
-    game.onTick(1700, "IntroSW",{ gonza.gravedad() })
-
-    keyboard.o().onPressDo({ sw.stop();
-                            self.corroboro() })
-    
-  }
-
-  method corroboro(){
-    if (habilitado){
-      game.removeTickEvent("IntroSW")
-      self.deshabilitador()
-      jugarla.habilitador()
-      jugarla.jugar()
-    }
-  }
-}
-object fondo2 {
-  ///Esto se remplaza por clase Suelo
-  method image() = "fondo0.jpg"
-  method position() = game.origin()
-}
-object jugarla2 {
-  const ancho = 12 //se mide en celdas de 50 x 50px
-  const alto = 12  //se mide en celdas de 50 x 50px
-
-  var property habilitado = false
-
-  method habilitador(){
-    habilitado = true
-  }
-
-    method deshabilitador(){
-    habilitado = false
-  }
-  method jugar() {
+  method nivel3() {
       config.removerVisuales()
+
       game.addVisual(fondo2)
       game.title("Pickle Rick")
-      game.height(alto) 
-      game.width(ancho)
       game.addVisual(portal)
       game.addVisual(portal2)
       //game.addVisual(arma)
@@ -258,12 +218,13 @@ object jugarla2 {
 
       //config.configurarTeclasRick()
 
-      game.onTick(300, "titilaPortal", {portal.titila()})
-      game.onTick(300, "titilaPortal2", {portal2.titila()})
+      //game.onTick(300, "titilaPortal", {portal.titila()})
+      //game.onTick(300, "titilaPortal2", {portal2.titila()})
       //game.onTick(2000, "titilaArma", {arma.titila()})
       //game.onTick(2000, "titilaPlaca", {placa.titila()})
 
   }
+
 }
 
 object config{
@@ -289,5 +250,7 @@ object config{
   method removerVisuales(){
     game.allVisuals().forEach({ visual => game.removeVisual(visual)})
   }
+
 }
+
 //////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-import nivel1.*
+import nivelesJoni.*
 import miscelaneos.*
 import wollok.game.*
 

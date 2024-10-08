@@ -30,16 +30,16 @@ object paleta {
 /////////Textos de Rick sin game.say/////////1
 class TextosRick{
   method position() = game.at(rick.position().x(),rick.position().y()+1)
-  method textColor() = paleta.negro()
+  method textColor() = paleta.amarillo()
   method textbackground() = paleta.verde()
 }
 object prueba inherits TextosRick{  
   method text() = "¡Pepita te caga todo el auto!"
 }
 object inventario inherits TextosRick{
-  method text() = "Partes de ArmaPortal:" + rick.cantidadPlacas().toString() + "/3" + "
+  method text() = "Partes de ArmaPortal:" + rick.cantidadPlacas().toString() + "/3" /*+ "
   perro:" + 3.toString() + "
-  gilada:" + paleta.amarillo().toString()
+  gilada:" + paleta.amarillo().toString()*/
   const lista = [paleta, saludo2]
 }
 object saludo2 inherits TextosRick{ 
@@ -60,7 +60,7 @@ object mensajeSW {
   Nalgalandia"
   method textColor() = paleta.amarillo()
 
-	method gravedad(){
+	method desplazamiento(){
   	const y = (position.y()+1)
 		position = game.at(position.x(),y)
 		
