@@ -6,9 +6,8 @@ object rick {
 
   var posicion = game.at(5,5)
   var imageRick = "rick0.png"
-  const property objetos = []
-  var property cantidadPlacas = 0
-
+  const property objetos = #{}
+  
   method image () = imageRick
   method position() = posicion
 
@@ -40,38 +39,16 @@ object rick {
     posicion = posicion.down(0.5)
   }
 
-  method queHacemosConLoAgarrado(objeto){
-    
-    if (objeto == arma){
-      config.textoCharlado(0000,4000,pichium)
-      objeto.agarrado()
-    }
-
-    if (objeto == placa){
-      if (cantidadPlacas < 3) {
-        cantidadPlacas += 1
-      }
-    }
-    if (objeto == placaa){
-      if (cantidadPlacas < 3) {
-        cantidadPlacas += 1
-      }
-    }
-    if (objeto == placaaa){
-      if (cantidadPlacas < 3) {
-        cantidadPlacas += 1
-      }
-    }
-    objeto.agarrado()
-    
+  method esPortal(objeto){
+    if (objeto.className() == "nivelesJoni.Portales"){
+      objeto.mapa()
+    } else {self.agarrar(objeto)}
   }
-
   
   method agarrar(objeto) {
     objetos.add(objeto)
-		game.removeVisual(objeto)
-
-    self.queHacemosConLoAgarrado(objeto)
+		objeto.agarrado(objeto)
+    
   }
 }
 
@@ -112,3 +89,8 @@ class Ratas {
 }
 
 const rata = new Ratas(posicion = game.at(5,5))
+/*
+object arriba{}
+object abajo{}
+object izquierda{}
+object derecha{}*/

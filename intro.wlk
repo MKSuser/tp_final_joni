@@ -41,8 +41,8 @@ object primeraPantalla {
       game.removeVisual(mensajeInicio)
       game.removeVisual(fondo0)
       self.deshabilitador()
-      niveles.habilitador()
-      niveles.nivelSW() 
+      //niveles.habilitador()
+      niveles.nivel1() 
     }
   }
 //////////
