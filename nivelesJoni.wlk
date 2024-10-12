@@ -92,7 +92,11 @@ class Armas {
 
 class Placas {
   var property position
-  var property image = "placa0.png"
+  var property image = "placa0.png" // Sin declarar en el de Rodra
+
+/*  method position () = position
+
+  method image () = image*/ // Esto es de Rodra
 
   method titila () {
     image = "placa1.png"
@@ -114,6 +118,57 @@ class Placas {
     game.removeTickEvent("titilaPlaca")
     self.mover(objeto)
   }
+}
+
+class Lasers {
+  var posicion = rick.position()
+  var imagen = "laser0.png"
+
+  method image () = imagen
+
+  method position () = posicion
+  
+  method laserAbajo () {
+    posicion = posicion.down(1)
+  }
+
+  method laserDerecha () {
+    posicion = posicion.right(1)
+  } 
+  
+  method laserIzquierda () {
+    posicion = posicion.left(1)
+  }
+
+  method laserArriba () {
+    posicion = posicion.up(1)
+  }
+
+  method disparar () {
+    game.onCollideDo(self, {n => n.kill() //cada vez que choque algo  lo mata,si el objeto entiende el metodo kill()
+    self.kill()}) //y ademas el rayo se destruye
+    if(rick.image() == "rick0.png" or rick.image() == "rick1.png"){
+      imagen = "laser1.png"
+      game.addVisual(self)
+      game.onTick(200, "laserAbajo", {self.laserAbajo()})
+    } else if(rick.image() == "rick2.png" or rick.image() == "rick3.png"){
+      imagen = "laser0.png"
+      game.addVisual(self)
+      game.onTick(200, "laserIzquierda", {self.laserIzquierda()})
+    } else if(rick.image() == "rick4.png" or rick.image() == "rick5.png"){
+      imagen = "laser1.png"
+      game.addVisual(self)
+      game.onTick(200, "laserArriba", {self.laserArriba()})
+    } else if(rick.image() == "rick6.png" or rick.image() == "rick7.png"){
+      imagen = "laser0.png"
+      game.addVisual(self)
+      game.onTick(200, "laserDerecha", {self.laserDerecha()})
+    }
+  }
+  
+  method kill(){
+    game.removeVisual(self)
+  }  
 }
 
 object niveles {
@@ -184,6 +239,12 @@ object niveles {
       config.crearArma(3,3)
 
       game.addVisual(rata)
+      game.addVisual(rata2)
+      game.addVisual(rata3)
+      game.onTick(800, "perseguir", {rata.perseguir()})
+      game.onTick(900, "perseguir2", {rata2.perseguir()})
+      game.onTick(1000, "perseguir3", {rata3.perseguir()})
+
       game.addVisual(rick)
 
       config.configurarTeclasRick()
@@ -237,6 +298,8 @@ object config{
 
     keyboard.i().onPressDo({ self.textoCharlado(0000, 4000, inventario)})
 
+    keyboard.f().onPressDo({new Lasers().disparar()}) //cada vez que apreto F creo un obejeto laser con la clase Lasers y lo disparo
+
   }
 
   // Accion ni bien se colisiona
@@ -267,6 +330,12 @@ object config{
     game.addVisual(arma)
     game.onTick(2000, "titilaArma", {arma.titila()})
   }
+
+/*  method crearRata(x,y){
+    const rata = new Ratas(posicion = game.at(x,y))
+    game.addVisual(rata)
+    game.onTick(1000, "perseguir", {rata.perseguir()})
+  }*/
   
   // Lista para printearLoQueTenemos()
   method listarArmas(){

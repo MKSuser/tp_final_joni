@@ -101,6 +101,26 @@ class Ratas {
     game.schedule(200, {imageRata = "rata0.png"})
     posicion = posicion.down(0.5)
   }
+  method perseguir() {
+    if(rick.position().x() > self.position().x()){
+      self.derecha()
+    } else if (rick.position().x() < self.position().x()){
+      self.izquierda()
+    }
+
+    if(rick.position().y() > self.position().y()){
+      self.arriba()
+    } else if (rick.position().y() < self.position().y()){
+      self.abajo()
+    }  
+  }
+
+  method kill(){
+      game.removeVisual(self)
+  }
+
 }
 
-const rata = new Ratas(posicion = game.at(5,5))
+const rata = new Ratas(posicion = game.at(0,0))
+const rata2 = new Ratas(posicion = game.at(12,0))
+const rata3 = new Ratas(posicion = game.at(0,12))
