@@ -32,7 +32,9 @@ object gonza {
 class Portales {
   var image = "portal0.png"
   var position
-  var property mapa
+  var property mapa = niveles.nivel3()
+
+  //method mapa() = mapa2
 
   method image () = image
   
@@ -46,7 +48,6 @@ class Portales {
   }
   method agarrado(objeto) {
       self.mapa()
-
   }
 }
 
@@ -59,9 +60,11 @@ object p inherits Portales(position = game.at(0,5)){
   }
 }*/
 
+//var portal = new Portales(position = game.at(0,5) ,mapa = niveles.nivel1())
+
 class Armas {
   var position
-  var image = "gun0.png"
+  var image = "gun0.png" // En el de Rodra no hay imagen, se declara al crearlo
 
   method position () = position
 
@@ -82,7 +85,7 @@ class Armas {
     //config.textoCharlado(0000,4000,pichium)
     //game.removeVisual(objeto)
     self.mover(objeto)
-    game.removeTickEvent("titilaArma")
+    game.removeTickEvent("titilaArma") 
   }
 }
 
@@ -99,7 +102,6 @@ class Placas {
   method mover(objeto){
     //const placaInv = new Placas(position = game.at(self.contarPlacas(objeto),11))
     //game.addVisual(placaInv)
-    
     position = game.at(config.listarPlacas().size(),11)
   }
   
@@ -181,7 +183,6 @@ object niveles {
 
       config.crearArma(3,3)
 
-
       game.addVisual(rata)
       game.addVisual(rick)
 
@@ -250,7 +251,7 @@ object config{
   }
 
   method crearPortal(x,y){
-    const portal = new Portales(position = game.at(x,y), mapa = niveles.nivel3())
+    const portal = new Portales(position = game.at(x,y))
     game.addVisual(portal)
     game.onTick(300, "titilaPortal", {portal.titila()})
   }

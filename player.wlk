@@ -1,13 +1,18 @@
 import nivelesJoni.*
 import miscelaneos.*
 import wollok.game.*
+import intro.*
 
 object rick {
 
   var posicion = game.at(5,5)
   var imageRick = "rick0.png"
-  const property objetos = #{}
-  
+  const property objetos = []
+
+  // Variables para tener en cuenta la muerte
+  /*var property energia = 100
+  var property muerte = primeraPantalla.inicio()
+*/
   method image () = imageRick
   method position() = posicion
 
@@ -50,6 +55,16 @@ object rick {
 		objeto.agarrado(objeto)
     
   }
+/*
+  method estado(){
+    if (energia <= 0){
+      self.morir()
+    }
+  }
+  
+  method morir(){
+    self.muerte() 
+  }*/
 }
 
 class Ratas {
@@ -89,8 +104,3 @@ class Ratas {
 }
 
 const rata = new Ratas(posicion = game.at(5,5))
-/*
-object arriba{}
-object abajo{}
-object izquierda{}
-object derecha{}*/
