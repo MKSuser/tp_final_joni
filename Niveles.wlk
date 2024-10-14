@@ -27,8 +27,6 @@ object niveles {
       config.crearPortal(11,5)
 
       config.crearPlaca(4,4)
-      config.crearPlaca(3,4)
-      config.crearPlaca(2,4)
 
       config.crearArma(3,3)
 
@@ -49,14 +47,15 @@ object niveles {
       game.height(alto) 
       game.width(ancho)
 
+      config.printearLoQueTenemos()
+
       config.crearPortal(0,5)
       config.crearPortal(11,5)
       
-      config.printearLoQueTenemos()
-
       config.crearPlaca(3,4)
 
       config.crearRata()
+
       game.addVisual(rick)
 
   }
@@ -73,6 +72,8 @@ object niveles {
       config.crearPortal(0,5)
       config.crearPortal(11,5)
 
+      config.crearPlaca(2,4)
+
       config.printearLoQueTenemos()
       
       config.crearRata()
@@ -87,10 +88,10 @@ object niveles {
       game.height(alto) 
       game.width(ancho)
 
+      config.printearLoQueTenemos()
+
       config.crearPortal(0,5)
       config.crearPortal(11,5)
-
-      config.printearLoQueTenemos()
       
       config.crearRata()
       game.addVisual(rick)

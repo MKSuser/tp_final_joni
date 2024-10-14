@@ -125,12 +125,12 @@ class Lasers {
       rick.lasers().add(self)
     }
 
-    if ((self.position().x().between(0,game.width()-1)) && (self.position().y().between(0,game.height()-1))){
+    //if ((self.position().x().between(0,game.width()-1)) && (self.position().y().between(0,game.height()-1))){
       
     game.onCollideDo(self, {n => n.kill() //cada vez que choque algo  lo mata,si el objeto entiende el metodo kill()
     self.kill()}) //y ademas el rayo se destruye
 
-    } 
+    //} 
     posicion = rick.position()
     if(rick.image() == "rickfrente1.png" or rick.image() == "rickfrente2.png"){
       game.schedule(300, {
