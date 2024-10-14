@@ -1,5 +1,11 @@
+import Niveles.*
 import wollok.game.*
-import nivelesJoni.*
+import PickleRick.*
+import Config.*
+import Enemigos.*
+import Objetos.*
+import Mapas.*
+
 
 object mensajeInicio {
   method position() = game.at(5,5) //se mide en celdas de 50 x 50px
@@ -7,8 +13,8 @@ object mensajeInicio {
   method textColor() = "#ffffffff"
 }
 
-object fondo0 {
-  method image () = "menu.jpeg"
+object fondoInicio {
+  method image () = "fondoInicio.jpeg"
   method position() = game.at(-7,0)
 }
 
@@ -28,7 +34,7 @@ object primeraPantalla {
     game.title("Pickle Rick")
 	  game.height(alto) 
 	  game.width(ancho)  
-    game.addVisual(fondo0)
+    game.addVisual(fondoInicio)
     game.addVisual(mensajeInicio)
 //////////
     keyboard.e().onPressDo({ self.corroboro() })
@@ -40,7 +46,7 @@ object primeraPantalla {
   method corroboro(){
     if (habilitado){
       game.removeVisual(mensajeInicio)
-      game.removeVisual(fondo0)
+      game.removeVisual(fondoInicio)
       self.deshabilitador()
       //niveles.habilitador()
       niveles.nivel1() 
