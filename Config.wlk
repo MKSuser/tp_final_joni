@@ -12,6 +12,7 @@ object config{
   var property idRatas = 0
   var property idLaser = 0
   var property disparo = 0
+  var property cantBalas = 3
 
 
   // El ".say" casero
@@ -35,35 +36,40 @@ object config{
     
   }
 
-  // Accion ni bien se colisiona
+  /*// Accion ni bien se colisiona - Por ahora lo usamos distinto
   method configurarColisiones() {
     game.onCollideDo(rick, { algo => algo.colision(rick)})
 
-	}
+	}*/
 
+/* AL FINAL CON EL CLEAR() LO SOLUCIONAMOS EL TEMA DE LOS VISUALES*/
   // Remover TODOS los visuales
   method removerVisuales(){
     game.allVisuals().forEach({ visual => game.removeVisual(visual)})
   }
 
+  // Creador de portales
   method crearPortal(x,y){
     const portal = new Portales(position = game.at(x,y))
     game.addVisual(portal)
     game.onTick(300, "titilaPortal", {portal.titila()})
   }
-
+  
+  // Creador de placas
   method crearPlaca(x,y){
     const placa = new Placas(position = game.at(x,y))
     game.addVisual(placa)
     game.onTick(2000, "titilaPlaca", {placa.titila()})
   }
 
+  // Creador de armas
   method crearArma(x,y){
     const arma = new Armas(position = game.at(x,y))
     game.addVisual(arma)
     game.onTick(2000, "titilaArma", {arma.titila()})
   }
   
+  // Creador de ratas
   method crearRata(){
     idRatas += 1
     const rata = new Ratas()
@@ -71,17 +77,17 @@ object config{
     rata.crearRata()
   }
 
-  // Lista para printearLoQueTenemos()
+  // Lista de Armas para printearLoQueTenemos()
   method listarArmas(){
     return rick.objetos().filter({n => n.className() == "Objetos.Armas"})
   }
 
-  // Lista para printearLoQueTenemos()
+  // Lista de Placas para printearLoQueTenemos()
   method listarPlacas(){
     return rick.objetos().filter({n => n.className() == "Objetos.Placas"})
   }
 
-  // Metodo para poder arrastar lo que agarramos
+  // Metodo para...
   method printearLoQueTenemos(){
         
     self.listarArmas().forEach({ objeto => game.addVisual(objeto)})
@@ -90,19 +96,23 @@ object config{
 
   }
 
-  // Verificar que tenemos la pistolota cargada y que tiene menos de 3 balas
+  // Verificar que tenemos la pistolota y que tiene menos de X balas
   method tenemosPistolaYnoLlena(){
-    return (rick.objetos().any({n => n.className() == "Objetos.Armas"}) && (rick.lasers().size() < 3))
+    return (rick.objetos().any({n => n.className() == "Objetos.Armas"}) && (rick.lasers().size() < cantBalas))
   }
 
-  // Verificamos que ya tenemos 3 balas, por lo que utilizamos las balas en el invetario
+  // Verificamos que ya tenemos X balas, por lo que las utilizamos según el "cargador" de Rick
     method tenemosPistolaCompleta(){
   
       if (not self.tenemosPistolaYnoLlena()){
         rick.lasers().find({ laser => laser.position() == game.at(-1,-1) }).disparar()
       } 
     }
- // Pichium
+
+  // Llamada de los metodos anteriores
+  // Si se cumple la primer condi generamos un nuevo laser
+  // e incrementamos en 1 el ID para poder llevar los OnTick independientemente.
+  // Si ya completamos el arma solo usa las mismas balas siempre
   method disparar(){
    
     if (self.tenemosPistolaYnoLlena()){
@@ -113,6 +123,7 @@ object config{
   }
 }
 
+// Paleta para uso de colores
 object paleta {
   const property verde = "00FF00"
   const property rojo = "FF0000"

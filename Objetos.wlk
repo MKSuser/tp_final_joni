@@ -120,7 +120,9 @@ class Lasers {
 
   method disparar () {
     
-    if (rick.lasers().size() < 3){
+    // Compara si ya hay 3 lasers creados. Si no es así 
+    // genera un nuevo ID y agrega el laser a la pistola
+    if (rick.lasers().size() < config.cantBalas()){
       self.crearID()
       rick.lasers().add(self)
     }
@@ -130,8 +132,12 @@ class Lasers {
     game.onCollideDo(self, {n => n.kill() //cada vez que choque algo  lo mata,si el objeto entiende el metodo kill()
     self.kill()}) //y ademas el rayo se destruye
 
-    //} 
+    //}
+
+    // Reseteamos la posición del rayo donde Rick.
     posicion = rick.position()
+    
+    // Logica para al traso del disparo
     if(rick.image() == "rickfrente1.png" or rick.image() == "rickfrente2.png"){
       game.schedule(300, {
         imagen = "laserY.png" 
@@ -159,6 +165,8 @@ class Lasers {
     } 
   }
   
+  // Metodo para "deshacer" el laser
+  // Para no saturar el procesador, utilizamos los mismo lasers una y otra vez.
   method kill(){
     game.removeVisual(self)
     game.removeTickEvent("laser" + id.toString())
@@ -166,5 +174,3 @@ class Lasers {
   
   }  
 }
-// Buscar que las balas sea 3-5
-// Testear la imagen 

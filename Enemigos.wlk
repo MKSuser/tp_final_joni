@@ -78,10 +78,10 @@ class Ratas  inherits Personajes (vida = 20, poder = 5) {
     game.onTick(800, "perseguir" + id.toString(), {self.perseguir()})
   }
 
+// Mutee los primeros 2 porque al final solo cambiamos la posición para "matarlas" 
   method kill(){
       //game.removeVisual(self)
       //game.removeTickEvent("perseguir" + id.toString())
-      //config.crearRata()
       posicion = game.at(-1.randomUpTo(12).truncate(0),-1.randomUpTo(12).truncate(0))
   }
 

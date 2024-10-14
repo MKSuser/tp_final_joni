@@ -29,7 +29,8 @@ object primeraPantalla {
   }  
 //////////  
   method inicio() {
-    config.removerVisuales()
+    game.clear()
+    //config.removerVisuales()
     
     game.title("Pickle Rick")
 	  game.height(alto) 
