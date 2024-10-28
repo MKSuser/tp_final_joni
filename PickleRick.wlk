@@ -7,7 +7,7 @@ import Mapas.*
 import Niveles.*
 //-------------------   PICKLE RICK -------------------
 object rick {
-
+  
   var posicion = game.at(5,5) // posicion inicial de Rick
   var imageRick = "rickfrente1.png" // Imagen0 de Rick 
 
@@ -36,6 +36,8 @@ object rick {
 
   method derecha() {
     if(self.position().x() < (game.width() - 1)){
+      sonido.play("pasos3.mp3")
+      //pasos.play()
       imageRick = "rickderecha2.png"
       posicion = posicion.right(0.5)
       game.schedule(200, {imageRick = "rickderecha1.png"})
@@ -45,6 +47,8 @@ object rick {
 
   method izquierda() {
     if(self.position().x() > 0){
+      sonido.play("pasos3.mp3")
+      //pasos.play()
       imageRick = "rickizquierda2.png"
       posicion = posicion.left(0.5)
       game.schedule(200, {imageRick = "rickizquierda1.png"})
@@ -54,6 +58,8 @@ object rick {
 
   method arriba() {
     if(self.position().y() < (game.height() - 2)){
+      sonido.play("pasos3.mp3")
+      //pasos.play()
       imageRick = "rickespalda2.png"
       posicion = posicion.up(0.5)
       game.schedule(200, {imageRick = "rickespalda1.png"})
@@ -63,6 +69,8 @@ object rick {
 
   method abajo() {
     if(self.position().y() > 0){
+      sonido.play("pasos3.mp3")
+      //pasos.play()
       imageRick = "rickfrente2.png"
       posicion = posicion.down(0.5)
       game.schedule(200, {imageRick = "rickfrente1.png"})

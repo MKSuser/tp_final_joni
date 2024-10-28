@@ -9,8 +9,8 @@ import Mapas.*
 //------------------------- Configuraciones -----------------------------------
 
 object config{
-  var property idRatas = 0
-  var property idLaser = 0
+  //var property idRatas = 0
+  //var property idLaser = 0
   var property disparo = 0
   var property cantBalas = 3
 
@@ -52,7 +52,7 @@ object config{
   method crearPortal(x,y){
     const portal = new Portales(position = game.at(x,y))
     game.addVisual(portal)
-    game.onTick(300, "titilaPortal", {portal.titila()})
+    //game.onTick(2000, "titilaPortal", {portal.titila()})
   }
   
   // Creador de placas
@@ -71,7 +71,7 @@ object config{
   
   // Creador de ratas
   method crearRata(){
-    idRatas += 1
+    //idRatas += 1
     const rata = new Ratas()
     game.addVisual(rata)
     rata.crearRata()
@@ -105,7 +105,7 @@ object config{
     method tenemosPistolaCompleta(){
   
       if (not self.tenemosPistolaYnoLlena()){
-        rick.lasers().find({ laser => laser.position() == game.at(-1,-1) }).disparar()
+        rick.lasers().find({ laser => laser.position() == game.at(13,13) }).disparar()
       } 
     }
 
@@ -117,7 +117,7 @@ object config{
    
     if (self.tenemosPistolaYnoLlena()){
       new Lasers().disparar()
-      idLaser += 1
+      //idLaser += 1
     }else {
       self.tenemosPistolaCompleta()}
   }
@@ -152,8 +152,9 @@ object inventario inherits TextosRick{
 }
 
 object saludo2 inherits TextosRick{ 
-  method text() = "qué mirás gato? 
-  nunca viste un pickle?"
+  method text() = "eeeeeeeehh, como que
+  le falta un poco de 
+  explosiones a esto!!"
 }
 
 object pichium inherits TextosRick{ 

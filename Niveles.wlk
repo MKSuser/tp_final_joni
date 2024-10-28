@@ -35,7 +35,7 @@ object niveles {
       config.crearRata()
 
       game.addVisual(rick)
-
+      
   }
 
   method nivel2() {
@@ -58,6 +58,8 @@ object niveles {
 
       game.addVisual(rick)
 
+      config.textoCharlado(3000, 6000, saludo2)//Pruebas
+
   }
 
   method nivel3() {
@@ -78,6 +80,7 @@ object niveles {
       
       config.crearRata()
       game.addVisual(rick)
+      config.textoCharlado(3000, 6000, saludo2)//Pruebas
   }
   method nivel4() {
       game.clear()
@@ -95,6 +98,7 @@ object niveles {
       
       config.crearRata()
       game.addVisual(rick)
+      config.textoCharlado(3000, 6000, saludo2) //Pruebas
 
   }
 
@@ -111,6 +115,7 @@ object niveles {
       
       config.crearRata()
       game.addVisual(rick)
+      config.textoCharlado(3000, 6000, saludo2) //Pruebas
   }
 
 

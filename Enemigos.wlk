@@ -21,68 +21,103 @@ class Personajes {
 }
 
 class Ratas  inherits Personajes (vida = 20, poder = 5) {
-  var posicion = game.at(-1.randomUpTo(12).truncate(0),-1.randomUpTo(12).truncate(0))
+  
+  var property posicion = game.at((-1.randomUpTo(12)).randomUpTo(12).truncate(0),(-1.randomUpTo(12)).randomUpTo(12).truncate(0))
   var imageRata = "ratafrente1.png"
-  var id = 0
+  //var id = 0
   
   method image () = imageRata
+
   method position() = posicion
 
   method derecha() {
     imageRata = "rataderecha2.png"
-    posicion = posicion.right(0.5)
+    posicion = posicion.right(1)
     game.schedule(200, {imageRata = "rataderecha1.png"})
-    posicion = posicion.right(0.5)
+    //posicion = posicion.right(0.5)
   }
 
   method izquierda() {
     imageRata = "rataizquierda2.png"
-    posicion = posicion.left(0.5)
+    posicion = posicion.left(1)
     game.schedule(200, {imageRata = "rataizquierda1.png"})
-    posicion = posicion.left(0.5)
+    //posicion = posicion.left(0.5)
   }
 
   method arriba() {
     imageRata = "rataespalda2.png"
-    posicion = posicion.up(0.5)
+    posicion = posicion.up(1)
     game.schedule(200, {imageRata = "rataespalda1.png"})
-    posicion = posicion.up(0.5)
+    //posicion = posicion.up(0.5)
   }
 
   method abajo() {
     imageRata = "ratafrente2.png"
-    posicion = posicion.down(0.5)
+    posicion = posicion.down(1)
     game.schedule(200, {imageRata = "ratafrente1.png"})
-    posicion = posicion.down(0.5)
+    //posicion = posicion.down(0.5)
   }
+
+  method hayRataDerecha(){
+    return game.getObjectsIn(posicion.right(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+  }
+  method hayRataIzquierda(){
+    return game.getObjectsIn(posicion.left(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+  }
+  method hayRataArriba(){
+    return game.getObjectsIn(posicion.up(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+  }
+  method hayRataAbajo(){
+    return game.getObjectsIn(posicion.down(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+  }
+
   method perseguir() {
     if(rick.position().x() > self.position().x()){
-      self.derecha()
+      if (self.hayRataDerecha()){
+      posicion = self.position()
+      } else {
+        self.derecha()}
+
     } else if (rick.position().x() < self.position().x()){
-      self.izquierda()
+        if (self.hayRataIzquierda()){
+        posicion = self.position()
+        } else { 
+          self.izquierda()}
     }
 
     if(rick.position().y() > self.position().y()){
-      self.arriba()
+      if (self.hayRataArriba()){
+      posicion = self.position()
+      } else {
+        self.arriba()}
+
     } else if (rick.position().y() < self.position().y()){
-      self.abajo()
+      if (self.hayRataAbajo()){
+      posicion = self.position()
+      } else {
+        self.abajo()}
     }  
   }
 
-  method crearId() {
-    id = config.idRatas() 
-  }
+
+
+
+  //method crearId() {
+  //  id = config.idRatas() 
+  //}
 
   method crearRata() {
-    self.crearId()
-    game.onTick(800, "perseguir" + id.toString(), {self.perseguir()})
+  //  self.crearId()
+    game.onTick(800, "perseguir" + self.identity(), {self.perseguir()})
   }
 
 // Mutee los primeros 2 porque al final solo cambiamos la posición para "matarlas" 
   method kill(){
       //game.removeVisual(self)
-      //game.removeTickEvent("perseguir" + id.toString())
-      posicion = game.at(-1.randomUpTo(12).truncate(0),-1.randomUpTo(12).truncate(0))
+      //game.removeTickEvent("perseguir" + self.identity())
+      sonido.play("muerteRatas.mp3")
+      //muerteRatas.play()
+      posicion = game.at((-1.randomUpTo(12)).randomUpTo(12).truncate(0),(-1.randomUpTo(12)).randomUpTo(12).truncate(0))
   }
 
 }

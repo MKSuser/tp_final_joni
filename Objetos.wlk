@@ -19,9 +19,9 @@ class Portales {
   
   method titila() {
     image = "portal1.png"
-    game.schedule(75, {image = "portal2.png"})
-    game.schedule(75, {image = "portal3.png"})
-    game.schedule(75, {image = "portal0.png"})
+    game.schedule(500, {image = "portal2.png"})
+    game.schedule(1000, {image = "portal3.png"})
+    game.schedule(1500, {image = "portal0.png"})
   }
   /*
   method agarrado(objeto) {
@@ -38,9 +38,9 @@ object transicion {
   
   method titila() {
     image = "portalGrande1.png"
-    game.schedule(75, {image = "portalGrande2.png"})
-    game.schedule(75, {image = "portalGrande3.png"})
-    game.schedule(75, {image = "portalGrande0.png"})
+    game.schedule(250, {image = "portalGrande2.png"})
+    game.schedule(500, {image = "portalGrande3.png"})
+    game.schedule(1000, {image = "portalGrande0.png"})
   }
 }
 
@@ -114,16 +114,19 @@ class Lasers {
     posicion = posicion.up(1)
   }
 
-  method crearID(){
-    id = config.idLaser()
-  }
+  //method crearID(){
+  //  id = config.idLaser()
+ // }
 
   method disparar () {
+    
+    sonido.play("disparo4.mp3")
+    //disparo.play()
     
     // Compara si ya hay 3 lasers creados. Si no es así 
     // genera un nuevo ID y agrega el laser a la pistola
     if (rick.lasers().size() < config.cantBalas()){
-      self.crearID()
+   //   self.crearID()
       rick.lasers().add(self)
     }
 
@@ -142,25 +145,25 @@ class Lasers {
       game.schedule(300, {
         imagen = "laserY.png" 
         game.addVisual(self) 
-        game.onTick(200, "laser" + id.toString(), {if (self.position().y() > 0){self.laserAbajo()} else {self.kill()}}) //cuando sale de la pantalla muere el rayo
+        game.onTick(200, "laser" + self.identity(), {if (self.position().y() > 0){self.laserAbajo()} else {self.kill()}}) //cuando sale de la pantalla muere el rayo
       })
     } else if(rick.image() == "rickizquierda1.png" or rick.image() == "rickizquierda2.png"){
       game.schedule(300, {
           imagen = "laserX.png"
           game.addVisual(self)
-          game.onTick(200, "laser" + id.toString(), {if (self.position().x() > 0){self.laserIzquierda()} else {self.kill()}})
+          game.onTick(200, "laser" + self.identity(), {if (self.position().x() > 0){self.laserIzquierda()} else {self.kill()}})
       })    
     } else if(rick.image() == "rickespalda1.png" or rick.image() == "rickespalda2.png"){
       game.schedule(300, {
         imagen = "laserY.png"
         game.addVisual(self)
-        game.onTick(200, "laser" + id.toString(), {if (self.position().y() < 12){self.laserArriba()} else {self.kill()}})
+        game.onTick(200, "laser" + self.identity(), {if (self.position().y() < 12){self.laserArriba()} else {self.kill()}})
       })  
     } else if(rick.image() == "rickderecha1.png" or rick.image() == "rickderecha2.png"){
       game.schedule(300, {
         imagen = "laserX.png"
         game.addVisual(self)
-        game.onTick(200, "laser" + id.toString(), {if (self.position().x() < 12){self.laserDerecha()} else {self.kill()}})
+        game.onTick(200, "laser" + self.identity(), {if (self.position().x() < 12){self.laserDerecha()} else {self.kill()}})
       })
     } 
   }
@@ -169,8 +172,48 @@ class Lasers {
   // Para no saturar el procesador, utilizamos los mismo lasers una y otra vez.
   method kill(){
     game.removeVisual(self)
-    game.removeTickEvent("laser" + id.toString())
-    posicion = game.at(-1,-1)
+    game.removeTickEvent("laser" + self.identity())
+    posicion = game.at(13,13)
   
   }  
 }
+
+object sonido{
+
+  method play(sonido){
+    game.sound(sonido).play()
+  }
+
+}
+/*
+
+object pasos{
+
+  method play(){
+    game.sound("pasos3.mp3").play()
+  }
+
+}
+
+object muerteRatas{
+
+  method play(){
+    game.sound("muerteRatas.mp3").play()
+  }
+
+}
+
+object disparo{
+
+  method play(){
+    game.sound("disparo4.mp3").play()
+  }
+
+}
+
+object ruidoAparicion {
+  method play(){
+    game.sound("ruidito.mp3").play()
+  }
+
+}*/
