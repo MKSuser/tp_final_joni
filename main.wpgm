@@ -1,8 +1,9 @@
 import wollok.game.*
 import intro.*
+import Niveles.*
 
 //---------------------------- PLAP GAMES ----------------------------------
 program plapGames {
-	primeraPantalla.inicio()
+	inicioPlap.presentacion()
 	game.start()
 }

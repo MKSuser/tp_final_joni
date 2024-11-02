@@ -19,9 +19,9 @@ class Portales {
   
   method titila() {
     image = "portal1.png"
-    game.schedule(500, {image = "portal2.png"})
-    game.schedule(1000, {image = "portal3.png"})
-    game.schedule(1500, {image = "portal0.png"})
+    game.schedule(1000, {image = "portal2.png"})
+    game.schedule(2000, {image = "portal3.png"})
+    game.schedule(3000, {image = "portal0.png"})
   }
   /*
   method agarrado(objeto) {
@@ -66,7 +66,6 @@ class Armas {
     game.removeTickEvent("titilaArma") 
   }
 }
-
 
 class Placas {
   var property position
@@ -185,35 +184,3 @@ object sonido{
   }
 
 }
-/*
-
-object pasos{
-
-  method play(){
-    game.sound("pasos3.mp3").play()
-  }
-
-}
-
-object muerteRatas{
-
-  method play(){
-    game.sound("muerteRatas.mp3").play()
-  }
-
-}
-
-object disparo{
-
-  method play(){
-    game.sound("disparo4.mp3").play()
-  }
-
-}
-
-object ruidoAparicion {
-  method play(){
-    game.sound("ruidito.mp3").play()
-  }
-
-}*/

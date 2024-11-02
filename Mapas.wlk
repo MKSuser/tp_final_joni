@@ -30,6 +30,46 @@ const mapa3 = new Mapas (imagen = "fondoMadera.jpg")
 const mapa4 = new Mapas (imagen = "fondoPiedra.jpg") //LA FINAL
 
 //Selecciona un mapa random a menos que tenga los 4 objetos y va a la final
+
+object mapaRandom {
+  const listaNiveles = [2,3,4]
+  
+  method elegirMapa (){
+
+    if (listaNiveles.size() == 0) {
+      sonido.play("mapaTransicion3.mp3")
+      game.addVisual(transicion)
+      transicion.titila()
+      game.schedule(800, {niveles.nivel5()})
+    }
+
+    var nivelElegido = listaNiveles.anyOne()
+
+    if (nivelElegido == 2) {
+      sonido.play("mapaTransicion3.mp3")
+      game.addVisual(transicion)
+      listaNiveles.remove(nivelElegido)
+      transicion.titila()
+      game.schedule(800,{niveles.nivel2()})
+    }
+    else if (nivelElegido == 3) {
+      sonido.play("mapaTransicion3.mp3")
+      game.addVisual(transicion)
+      listaNiveles.remove(nivelElegido)
+      transicion.titila()
+      game.schedule(800,{niveles.nivel3()})
+    }
+    else if (nivelElegido == 4) {
+      sonido.play("mapaTransicion3.mp3")
+      game.addVisual(transicion)
+      listaNiveles.remove(nivelElegido)
+      transicion.titila()
+      game.schedule(800,{niveles.nivel4()})
+    }
+  }
+  
+}
+/*
 object mapaRandom {
   const listaNiveles = [2,3,4]
   
@@ -38,7 +78,7 @@ object mapaRandom {
     if (listaNiveles.size() == 0) {
       game.addVisual(transicion)
       transicion.titila()
-      game.schedule(300, {niveles.nivel5()})
+      game.schedule(800, {niveles.nivel5()})
     }
 
     var nivelElegido = listaNiveles.anyOne()
@@ -47,24 +87,24 @@ object mapaRandom {
       game.addVisual(transicion)
       listaNiveles.remove(nivelElegido)
       transicion.titila()
-      game.schedule(300,{niveles.nivel2()})
+      game.schedule(800,{niveles.nivel2()})
     }
     else if (nivelElegido == 3) {
       game.addVisual(transicion)
       listaNiveles.remove(nivelElegido)
       transicion.titila()
-      game.schedule(300,{niveles.nivel3()})
+      game.schedule(800,{niveles.nivel3()})
     }
     else if (nivelElegido == 4) {
       game.addVisual(transicion)
       listaNiveles.remove(nivelElegido)
       transicion.titila()
-      game.schedule(300,{niveles.nivel4()})
+      game.schedule(800,{niveles.nivel4()})
     }
   }
   
 }
-
+*/
 
 
 

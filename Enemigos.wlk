@@ -7,106 +7,113 @@ import intro.*
 import Niveles.*
 
 // Aca van los enemigos. Las ratas y el enemigo Final
-class Personajes {
-    var property vida 
-    var property poder 
 
-    method morir() {
-        if (self.vida()<=0) {game.removeVisual(self)}
-    }
-
-    method vidaRestar(x) {
-    self.vida()-x.poder()
-    }
-}
-
-class Ratas  inherits Personajes (vida = 20, poder = 5) {
-  
+class Enemigos {
+  var property vida
+  var property poder
   var property posicion = game.at((-1.randomUpTo(12)).randomUpTo(12).truncate(0),(-1.randomUpTo(12)).randomUpTo(12).truncate(0))
-  var imageRata = "ratafrente1.png"
-  //var id = 0
+
+  method morir() {
+    if (self.vida()<=0) {game.removeVisual(self)}
+
+  }
+
+  method vidaRestar(x) {
+  self.vida()-x.poder()
+  }
+
+  var property imagen
+
+  var property imagenFrente1
+  var property imagenFrente2
+  var property imagenDerecha1
+  var property imagenDerecha2
+  var property imagenIzquierda1
+  var property imagenIzquierda2
+  var property imagenEspalda1
+  var property imagenEspalda2
   
-  method image () = imageRata
+  method image () = imagen
 
   method position() = posicion
 
   method derecha() {
-    imageRata = "rataderecha2.png"
+    imagen = imagenDerecha2
     posicion = posicion.right(1)
-    game.schedule(200, {imageRata = "rataderecha1.png"})
+    game.schedule(200, {imagen = imagenDerecha1})
     //posicion = posicion.right(0.5)
   }
 
   method izquierda() {
-    imageRata = "rataizquierda2.png"
+    imagen = imagenIzquierda2
     posicion = posicion.left(1)
-    game.schedule(200, {imageRata = "rataizquierda1.png"})
+    game.schedule(200, {imagen = imagenIzquierda1})
     //posicion = posicion.left(0.5)
   }
 
   method arriba() {
-    imageRata = "rataespalda2.png"
+    imagen = imagenEspalda2
     posicion = posicion.up(1)
-    game.schedule(200, {imageRata = "rataespalda1.png"})
+    game.schedule(200, {imagen = imagenEspalda1})
     //posicion = posicion.up(0.5)
   }
 
   method abajo() {
-    imageRata = "ratafrente2.png"
+    imagen = imagenFrente2
     posicion = posicion.down(1)
-    game.schedule(200, {imageRata = "ratafrente1.png"})
+    game.schedule(200, {imagen = imagenFrente1})
     //posicion = posicion.down(0.5)
   }
 
-  method hayRataDerecha(){
-    return game.getObjectsIn(posicion.right(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+  method hayIgualDerecha(){
+    return game.getObjectsIn(posicion.right(1)).any({ cosa => cosa.className() == self.className() })
   }
-  method hayRataIzquierda(){
-    return game.getObjectsIn(posicion.left(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+
+  method hayIgualIzquierda(){
+    return game.getObjectsIn(posicion.left(1)).any({ cosa => cosa.className() == self.className() })
   }
-  method hayRataArriba(){
-    return game.getObjectsIn(posicion.up(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+
+  method hayIgualArriba(){
+    return game.getObjectsIn(posicion.up(1)).any({ cosa => cosa.className() == self.className() })
   }
-  method hayRataAbajo(){
-    return game.getObjectsIn(posicion.down(1)).any({ cosa => cosa.className() == "Enemigos.Ratas" })
+
+  method hayIgualAbajo(){
+    return game.getObjectsIn(posicion.down(1)).any({ cosa => cosa.className() == self.className() })
   }
 
   method perseguir() {
     if(rick.position().x() > self.position().x()){
-      if (self.hayRataDerecha()){
+      if (self.hayIgualDerecha()){
       posicion = self.position()
       } else {
         self.derecha()}
 
     } else if (rick.position().x() < self.position().x()){
-        if (self.hayRataIzquierda()){
+        if (self.hayIgualIzquierda()){
         posicion = self.position()
         } else { 
           self.izquierda()}
     }
 
     if(rick.position().y() > self.position().y()){
-      if (self.hayRataArriba()){
+      if (self.hayIgualArriba()){
       posicion = self.position()
       } else {
         self.arriba()}
 
     } else if (rick.position().y() < self.position().y()){
-      if (self.hayRataAbajo()){
+      if (self.hayIgualAbajo()){
       posicion = self.position()
       } else {
         self.abajo()}
     }  
   }
 
-
-
-
   //method crearId() {
   //  id = config.idRatas() 
   //}
 
-  method crearRata() {
+  method crearEnemigo() {
   //  self.crearId()
     game.onTick(800, "perseguir" + self.identity(), {self.perseguir()})
   }
@@ -115,65 +122,52 @@ class Ratas  inherits Personajes (vida = 20, poder = 5) {
   method kill(){
       //game.removeVisual(self)
       //game.removeTickEvent("perseguir" + self.identity())
-      sonido.play("muerteRatas.mp3")
       //muerteRatas.play()
       posicion = game.at((-1.randomUpTo(12)).randomUpTo(12).truncate(0),(-1.randomUpTo(12)).randomUpTo(12).truncate(0))
+      rick.puntos(self.vida())
   }
 
 }
 
-//const rata  = new Ratas(posicion = game.at(-3.randomUpTo(3).truncate(0),-3.randomUpTo(15).truncate(0)))
-//const rata2  = new Ratas(posicion = game.at(8.randomUpTo(15).truncate(0),-3.randomUpTo(15).truncate(0)))
-//const rata3  = new Ratas(posicion = game.at(-3.randomUpTo(15).truncate(0),8.randomUpTo(15).truncate(0)))
-/*
-  method nivel1() {
+class Ratas inherits Enemigos(
+  vida = 20,
+  poder = 5,
+  imagen = "ratafrente1.png",
+  imagenFrente1 = "ratafrente1.png",
+  imagenFrente2 = "ratafrente2.png",
+  imagenDerecha1 = "rataderecha1.png",
+  imagenDerecha2 = "rataderecha2.png",
+  imagenIzquierda1 = "rataizquierda1.png",
+  imagenIzquierda2 = "rataizquierda2.png",
+  imagenEspalda1 = "rataespalda1.png",
+  imagenEspalda2 = "rataespalda2.png")
+  {
 
-      //config.removerVisuales()
-      game.clear()
-      config.configurarTeclasRick()
-      config.printearLoQueTenemos()
+  override method kill(){
+    super()
+    sonido.play("muerteRatas.mp3")
+  }
+}
 
-      game.addVisual(fondoRojo)
-      game.title("Pickle Rick")
-      game.height(alto) 
-      game.width(ancho)
+class Pepitas inherits Enemigos(
+  
+  vida = 20,
+  poder = 5,
 
-      config.crearPortal(0,5)
-      config.crearPortal(11,5)
+  imagen = "pepitaderecha.png",
+  imagenFrente1 = "pepitaabajo.png",
+  imagenFrente2 = "pepitaabajo.png",
+  imagenDerecha1 = "pepitaderecha.png",
+  imagenDerecha2 = "pepitaderecha.png",
+  imagenIzquierda1 = "pepitaizquierda.png",
+  imagenIzquierda2 = "pepitaizquierda.png",
+  imagenEspalda1 = "pepitaarriba.png",
+  imagenEspalda2 = "pepitaarriba.png")
+  {
 
-      config.crearPlaca(4,4)
-      //config.crearPlaca(3,4)
-      //config.crearPlaca(2,4)
-
-      config.crearArma(3,3)
-
-      game.addVisual(rata)
-      game.addVisual(rata2)
-      game.addVisual(rata3)
-      game.onTick(800, "perseguir", {rata.perseguir()})
-      game.onTick(900, "perseguir2", {rata2.perseguir()})
-      game.onTick(1000, "perseguir3", {rata3.perseguir()})
-
-      game.addVisual(rick)
-
+  override method kill(){
+    super()
+    sonido.play("muerteRatas.mp3")//CAMBIAR POR PAJARO
   }
 
-  method nivel3() {
-      //config.removerVisuales()
-      game.clear()
-      config.configurarTeclasRick()
-      config.printearLoQueTenemos()
-
-      game.addVisual(fondoEspacio)
-      game.title("Espacio")
-      game.addVisual(rata)
-      game.addVisual(rick)
-
-      config.crearPlaca(3,4)
-      
-      config.crearPortal(0,5)
-      config.crearPortal2(11,5)
-      
-  }
-
-}*/
+}
