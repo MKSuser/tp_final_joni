@@ -20,6 +20,11 @@ object inicioPlap {
   }
   
 }
+object imagenPlap{
+  method position() = game.origin()
+  method image() = "plap.jpeg"
+}
+
 object selectMenu {
     const ancho = 12
     const alto = 12

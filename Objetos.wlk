@@ -47,6 +47,7 @@ object transicion {
 class Armas {
   var position
   var image = "arma.png"
+  var property poder = 0
 
   method position () = position
 
@@ -89,9 +90,18 @@ class Placas {
 }
 
 class Lasers {
-  var posicion = rick.position()
+  var posicion
   var imagen = "laserX.png"
-  var property id = 0
+  //var property id = 0
+
+  var property imagenFrente1 = "rickfrente1.png"
+  var property imagenFrente2 = "rickfrente2.png"
+  var property imagenDerecha1 = "rickderecha1.png"
+  var property imagenDerecha2 = "rickderecha2.png"
+  var property imagenIzquierda1 = "rickizquierda1.png"
+  var property imagenIzquierda2 = "rickizquierda2.png"
+  var property imagenEspalda1 = "rickespalda1.png"
+  var property imagenEspalda2 = "rickespalda2.png"
 
   method image () = imagen
 
@@ -117,16 +127,16 @@ class Lasers {
   //  id = config.idLaser()
  // }
 
-  method disparar () {
+  method disparar (_entidad) {
     
     sonido.play("disparo4.mp3")
     //disparo.play()
     
     // Compara si ya hay 3 lasers creados. Si no es así 
     // genera un nuevo ID y agrega el laser a la pistola
-    if (rick.lasers().size() < config.cantBalas()){
+    if (_entidad.lasers().size() < config.cantBalas()){
    //   self.crearID()
-      rick.lasers().add(self)
+      _entidad.lasers().add(self)
     }
 
     //if ((self.position().x().between(0,game.width()-1)) && (self.position().y().between(0,game.height()-1))){
@@ -137,28 +147,28 @@ class Lasers {
     //}
 
     // Reseteamos la posición del rayo donde Rick.
-    posicion = rick.position()
-    
+    posicion = _entidad.position()    
+
     // Logica para al traso del disparo
-    if(rick.image() == "rickfrente1.png" or rick.image() == "rickfrente2.png"){
+    if(_entidad.image() == imagenFrente1 or _entidad.image() == imagenFrente2){
       game.schedule(300, {
         imagen = "laserY.png" 
         game.addVisual(self) 
         game.onTick(200, "laser" + self.identity(), {if (self.position().y() > 0){self.laserAbajo()} else {self.kill()}}) //cuando sale de la pantalla muere el rayo
       })
-    } else if(rick.image() == "rickizquierda1.png" or rick.image() == "rickizquierda2.png"){
+    } else if(_entidad.image() == imagenIzquierda1 or _entidad.image() == imagenIzquierda2){
       game.schedule(300, {
           imagen = "laserX.png"
           game.addVisual(self)
           game.onTick(200, "laser" + self.identity(), {if (self.position().x() > 0){self.laserIzquierda()} else {self.kill()}})
       })    
-    } else if(rick.image() == "rickespalda1.png" or rick.image() == "rickespalda2.png"){
+    } else if(_entidad.image() == imagenEspalda1 or _entidad.image() == imagenEspalda2){
       game.schedule(300, {
         imagen = "laserY.png"
         game.addVisual(self)
         game.onTick(200, "laser" + self.identity(), {if (self.position().y() < 12){self.laserArriba()} else {self.kill()}})
       })  
-    } else if(rick.image() == "rickderecha1.png" or rick.image() == "rickderecha2.png"){
+    } else if(_entidad.image() == imagenDerecha1 or _entidad.image() == imagenDerecha2){
       game.schedule(300, {
         imagen = "laserX.png"
         game.addVisual(self)

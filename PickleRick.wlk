@@ -81,7 +81,7 @@ object rickPosta inherits Personajes(
   paso = "vacio")
   {
 
-method esPortal(objeto){//CAMBIAR NOMBRE A QUE AGARRAMOS
+method seleccionador(objeto){//CAMBIAR NOMBRE A QUE AGARRAMOS
     if (selectMenu.mensajes().contains(objeto)){
       objeto.siguiente()
     }
@@ -161,5 +161,30 @@ object rick inherits Personajes(
     if (vida<=0){vida=100}// cambiar por el metodo gameOver(nahue)
   }
 //////////////
+
+  // Llamada de los metodos anteriores para consulta de balas en pistola.
+  // Si se cumple la primer condi generamos un nuevo laser
+  // Si ya completamos el arma solo usa las mismas balas siempre (3)
+
+  method disparar(){
+    
+      if (config.tenemosPistolaYnoLlena(self)){
+        new Lasers(
+          posicion = self.position(),
+          imagenFrente1 = "rickfrente1.png",
+          imagenFrente2 = "rickfrente2.png",
+          imagenDerecha1 = "rickderecha1.png",
+          imagenDerecha2 = "rickderecha2.png",
+          imagenIzquierda1 = "rickizquierda1.png",
+          imagenIzquierda2 = "rickizquierda2.png",
+          imagenEspalda1 = "rickespalda1.png",
+          imagenEspalda2 = "rickespalda2.png"
+        ).disparar(self)
+        //idLaser += 1
+      }else {
+        config.tenemosPistolaCompleta(self)}
+    }
+
+
 
 }

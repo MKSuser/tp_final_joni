@@ -7,7 +7,7 @@ import intro.*
 import Mapas.*
 
 //--------------------- Nivel 1 --------------------
-/*
+
 class Niveles{
   const ancho = 12 //se mide en celdas de 50 x 50px
   const alto = 12  //se mide en celdas de 50 x 50px
@@ -17,17 +17,26 @@ class Niveles{
 
   method estructura(){
 
-  game.clear()
-  config.configurarTeclasRick()
+    game.clear()
+    config.configurarTeclasRick()
 
-  game.addVisual(fondo)
-  game.title(nombre)
-  game.height(alto) 
-  game.width(ancho)
+    game.addVisual(fondo)
+    game.title(nombre)
+    game.height(alto) 
+    game.width(ancho)
 
-  config.printearLoQueTenemos()
-  niveles.sonidoFondo()
+    config.printearLoQueTenemos()
+    self.sonidoFondo()
 
+  }
+
+  const sonidofondo = game.sound("fondo.mp3")
+
+  method sonidoFondo() {
+    sonidofondo.shouldLoop(true)
+    keyboard.down().onPressDo({ sonidofondo.volume(0) }) 
+    keyboard.up().onPressDo({sonidofondo.volume(1)})
+    sonidofondo.play()
   }
 }
 
@@ -51,8 +60,13 @@ object nivel1 inherits Niveles(
     config.crearRata()
     config.crearRata()
     config.crearPepita()
-    niveles.sonidoFondo()
 
+//Gonza
+      game.whenCollideDo(rick, {enemigo=> (rick.runAtacadoTick(enemigo))})
+      
+      game.addVisual(vidaDanyTrejo)
+      game.addVisual(puntosGanados)
+      game.addVisual(vidaRick)
   }
 
 }
@@ -73,7 +87,6 @@ object nivel2 inherits Niveles(
     game.addVisual(rick)
     
     config.crearRata()
-    niveles.sonidoFondo()
 
     config.textoCharlado(3000, 6000, saludo2)//Pruebas
   }
@@ -93,8 +106,6 @@ object nivel3 inherits Niveles(
     config.crearPlaca(2,4)
 
     game.addVisual(rick)
-    niveles.sonidoFondo()
-
     config.crearRata()
     config.textoCharlado(3000, 6000, saludo2)//Pruebas
   }
@@ -112,8 +123,6 @@ object nivel4 inherits Niveles(
     config.crearPortal(11,5)
 
     game.addVisual(rick)
-    niveles.sonidoFondo()
-
     config.crearRata()
     config.textoCharlado(3000, 6000, saludo2) //Pruebas
   }
@@ -128,27 +137,29 @@ object nivel5 inherits Niveles(
     super()
     
     game.addVisual(rick)
-    niveles.sonidoFondo()
-
     config.crearRata()
+
+    game.addVisual(danyTrejo)
+    danyTrejo.seguir()
+
+    game.onTick(3000, "danyDisparo", {danyTrejo.disparar()})
+
     config.textoCharlado(3000, 6000, saludo2) //Pruebas
   }
 }
 
 object gameOver inherits Niveles(
   fondo = gameOverImagen,
-  nombre = "nivel5"
-){
+  nombre = "nivel5")
+  {
+
   method gameOver(){
       fondo.stop()
-      //game.clear()
+      game.clear()
       game.addVisual(fondo)
       sonido.play("gameover.mp3")
      
       keyboard.r().onPressDo({inicioPlap.presentacion()})
-      //keyboard.s()onPressDo(())
-      
-      //inicioPlap.habilitador()
       
       rick.reiniciarVida()
       rick.reiniciarPosicion()
@@ -156,54 +167,52 @@ object gameOver inherits Niveles(
     }
 }
 
-object winner inherits Niveles(
-  fondo = winnerImagen,
-  nombre = "nivel5"
-){
-
-  method winner(){
-      
-      fondo.stop()
-      game.clear()
-      game.addVisual(fondo)
-      
-      sonido.play("winner.mp3")
-      
-      keyboard.r().onPressDo({inicioPlap.presentacion()})
-      
-      //primeraPantalla.habilitador()
-      
-      rick.reiniciarVida()
-      rick.reiniciarPosicion()
-      rick.soltarObjetos()
-    }
-}
 object gameOverImagen {
     method position() = game.origin()
     method image() = "GameOver2.jpg"
   
 }
+
+object winner inherits Niveles(
+  fondo = winnerImagen,
+  nombre = "nivel5")
+  {
+
+  method winner(){
+      
+    fondo.stop()
+    game.clear()
+    game.addVisual(fondo)
+    
+    sonido.play("winner.mp3")
+    
+    keyboard.r().onPressDo({inicioPlap.presentacion()})
+    
+    rick.reiniciarVida()
+    rick.reiniciarPosicion()
+    rick.soltarObjetos()
+  }
+}
+
 object winnerImagen {
     method position() = game.origin()
     method image() = "Winner2.jpg"
 }
 
-
-object niveles {
-
-const fondo = game.sound("fondo.mp3")
-
-    method sonidoFondo() {
-      fondo.shouldLoop(true)
-      keyboard.down().onPressDo({ fondo.volume(0) }) 
-      keyboard.up().onPressDo({fondo.volume(1)})
-      fondo.play()
-    }
-
+///////falta completar
+object creditos inherits Niveles(
+  fondo = winnerImagen,
+  nombre = "nivel5")
+  {
+  
+  method creditos(){
+    game.clear()
+    game.addVisual(fondo)
+    game.addVisual(textoQueSeDesplaza)
+  }
 }
-*/
 
-
+/*
 object niveles {
   const ancho = 12 //se mide en celdas de 50 x 50px
   const alto = 12  //se mide en celdas de 50 x 50px
@@ -346,7 +355,7 @@ method gameOver(){
     }
 
 
-    method winner(){
+  method winner(){
       fondo.stop()
       game.clear()
       game.addVisual(winnerImagen)
@@ -368,8 +377,6 @@ const fondo = game.sound("fondo.mp3")
     }
 
 
-
-
 }
 object gameOverImagen {
     method position() = game.origin()
@@ -380,4 +387,4 @@ object gameOverImagen {
 object winnerImagen {
     method position() = game.origin()
     method image() = "Winner2.jpg"
-}
+}*/

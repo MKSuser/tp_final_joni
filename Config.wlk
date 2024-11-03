@@ -32,7 +32,7 @@ object config{
 
     //keyboard.i().onPressDo({ self.textoCharlado(0000, 4000, inventario)})
 
-    keyboard.f().onPressDo({ self.disparar()}) //Si no tiene arma no dispara
+    keyboard.f().onPressDo({ rick.disparar()}) //Si no tiene arma no dispara
     
   }
 
@@ -42,7 +42,7 @@ object config{
     keyboard.a().onPressDo({rickPosta.izquierda()})
     keyboard.d().onPressDo({rickPosta.derecha()})
     
-    keyboard.e().onPressDo({ rickPosta.esPortal(game.uniqueCollider(rickPosta))})
+    keyboard.e().onPressDo({ rickPosta.seleccionador(game.uniqueCollider(rickPosta))})
 
     //keyboard.e().onPressDo({ self.opcionesMenu(game.uniqueCollider(rickPosta))})
   }
@@ -114,31 +114,20 @@ object config{
   }
 
   // Verificar que tenemos la pistolota y que tiene menos de X balas
-  method tenemosPistolaYnoLlena(){
-    return (rick.objetos().any({n => n.className() == "Objetos.Armas"}) && (rick.lasers().size() < cantBalas))
+  method tenemosPistolaYnoLlena(_entidad){
+    return (_entidad.objetos().any({n => n.className() == "Objetos.Armas"}) && (_entidad.lasers().size() < cantBalas))
   }
 
   // Verificamos que ya tenemos X balas, por lo que las utilizamos según el "cargador" de Rick
-    method tenemosPistolaCompleta(){
+    method tenemosPistolaCompleta(_entidad){
   
-      if (not self.tenemosPistolaYnoLlena()){
-        rick.lasers().find({ laser => laser.position() == game.at(13,13) }).disparar()
+      if (not self.tenemosPistolaYnoLlena(_entidad)){
+        _entidad.lasers().find({ laser => laser.position() == game.at(13,13) }).disparar(self)
       } 
     }
 
-  // Llamada de los metodos anteriores
-  // Si se cumple la primer condi generamos un nuevo laser
-  // e incrementamos en 1 el ID para poder llevar los OnTick independientemente.
-  // Si ya completamos el arma solo usa las mismas balas siempre
-  method disparar(){
-   
-    if (self.tenemosPistolaYnoLlena()){
-      new Lasers().disparar()
-      //idLaser += 1
-    }else {
-      self.tenemosPistolaCompleta()}
-  }
 }
+
 
 // Paleta para uso de colores
 object paleta {
@@ -150,89 +139,103 @@ object paleta {
 }
 
 
-/////////Textos de Rick sin game.say/////////
-class Texto{
-  /*var posicion = game.at(rick.position().x(),rick.position().y()+1)
-  var property color = paleta.blanco()
-  var property texto = ""
+/////////Textos game.say/////////
 
-  method position() = posicion
-  method textColor() = color*/
-
-  method siguiente(){
-
-  }
-}
-
-object prueba inherits Texto{  
+//////////PRUEBAS
+object prueba{  
   method text() = "¡Prueba!"
 }
 
-
-object saludo2 inherits Texto{ 
+object saludo2 { 
   method text() = "eeeeeeeehh, como que
   le falta un poco de 
   explosiones a esto!!"
 }
 
-object pichium inherits Texto{ 
+object pichium { 
   method text() = "Ahora siiii!
   Pichium!
   PIchium!"
 }
-object imagenPlap{
-  method position() = game.origin()
-  method image() = "plap.jpeg"
-}
+//////////
 
-object mensajeJugar inherits Texto{
+////////////MENSAJES MENU PRINCIPAL
+
+///////COMENZAR
+object mensajeJugar {
   var property color = "#ffffffff"
   method position() = game.at(5,6) 
   method text() = "COMENZAR"
   method textColor() = color
+  
   method cambiaColor() {
     color = "008000"
     game.schedule(500, {color = "#ffffffff"})
   }
 
-  override method siguiente(){
-    niveles.nivel1()
-  }
+  method siguiente(){
+  nivel1.estructura() 
+}
 }
 
-object mensajeCreditos inherits Texto{
+///////CREDITOS
+object mensajeCreditos {
   var property color = "#ffffffff"
   method position() = game.at(5,4) 
   method text() = "CRÉDITOS"
   method textColor() = color
+  
   method cambiaColor() {
     color = "9B9B9B"
     game.schedule(500, {color = "#ffffffff"})
   }
   
-  override method siguiente(){
-    game.stop()//CAMBIAR
+  method siguiente(){
+    game.stop()//CAMBIAR POR NIVEL CREDITOS
   }
 }
 
-object mensajeSalir inherits Texto{
+///////QUIT
+object mensajeSalir {
   var property color = "#ffffffff"
   method position() = game.at(5,2)
   method text() = "SALIR"
   method textColor() = color
+  
   method cambiaColor() {
     color = "8B0000"
     game.schedule(500, {color = "#ffffffff"})
   }
-    override method siguiente(){
+  
+  method siguiente(){
     game.stop()
   }
 }
 
+////////TESTIGOS
 
-////////DE TODO UN POCO QUE PUEDE SERVIR
+///////////
+object puntosGanados {
+  var property position = game.at(7,11) 
+  method text() = "Puntaje: " + rick.puntos().toString()
+  method textColor() = paleta.blanco()
+}
 
-/*object textoQueSeDesplaza {
+//////////
+object vidaDanyTrejo {
+  method position() = game.at(rick.position().x(),rick.position().y()+1)
+  method text() = "HP: " + rick.vida().toString()//cambiar a rick por danyTrejo
+  method textColor() = paleta.rojo()
+}
+///////////
+object vidaRick {
+  var property position = game.at(10,11) 
+  method text() = "HP: " + rick.vida().toString()
+  method textColor() = paleta.verde()
+}
+
+
+object textoQueSeDesplaza {
   var property position = game.at(5,-6) //se mide en celdas de 50 x 50px
   
   method text() = "En una galazia muy muy lejana"
@@ -243,10 +246,12 @@ object mensajeSalir inherits Texto{
 		position = game.at(position.x(),y)
 		
 	}
-}*/
+}
+
+////////DE TODO UN POCO QUE PUEDE SERVIR
 
 /* TEXTO PARA IMPRIMIR COSAS CON STRING
-object inventario inherits TextosRick{
+object inventario sRick{
   method text() = "Partes de ArmaPortal:" + rick.objetos().toString() + "
   Lasers:" + rick.lasers().get(0).id().toString() + rick.lasers().get(1).id().toString() + rick.lasers().get(2).id().toString()
   //placa.contarPlacas().toString() 
@@ -255,19 +260,3 @@ object inventario inherits TextosRick{
   const lista = [paleta, saludo2]
 }
 */
-object puntosGanados {
-  var property position = game.at(7,11) 
-  method text() = "Puntaje: " + rick.puntos().toString()
-  method textColor() = paleta.blanco()
-}
-
-object vidaDanyTrejo {
-  method position() = game.at(rick.position().x(),rick.position().y()+1)
-  method text() = "PH: " + rick.vida().toString()//cambiar a rick por danyTrejo
-  method textColor() = paleta.rojo()
-}
-object vidaRick {
-  var property position = game.at(10,11) 
-  method text() = "PH: " + rick.vida().toString()
-  method textColor() = paleta.verde()
-}

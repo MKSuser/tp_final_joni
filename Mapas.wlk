@@ -40,7 +40,7 @@ object mapaRandom {
       sonido.play("mapaTransicion3.mp3")
       game.addVisual(transicion)
       transicion.titila()
-      game.schedule(800, {niveles.nivel5()})
+      game.schedule(800, {nivel5.estructura()})
     }
 
     var nivelElegido = listaNiveles.anyOne()
@@ -50,21 +50,21 @@ object mapaRandom {
       game.addVisual(transicion)
       listaNiveles.remove(nivelElegido)
       transicion.titila()
-      game.schedule(800,{niveles.nivel2()})
+      game.schedule(800,{nivel2.estructura()})
     }
     else if (nivelElegido == 3) {
       sonido.play("mapaTransicion3.mp3")
       game.addVisual(transicion)
       listaNiveles.remove(nivelElegido)
       transicion.titila()
-      game.schedule(800,{niveles.nivel3()})
+      game.schedule(800,{nivel3.estructura()})
     }
     else if (nivelElegido == 4) {
       sonido.play("mapaTransicion3.mp3")
       game.addVisual(transicion)
       listaNiveles.remove(nivelElegido)
       transicion.titila()
-      game.schedule(800,{niveles.nivel4()})
+      game.schedule(800,{nivel4.estructura()})
     }
   }
   

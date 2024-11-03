@@ -171,3 +171,51 @@ class Pepitas inherits Enemigos(
   }
 
 }
+object danyTrejo inherits Enemigos(
+  
+  vida = 100,
+  poder = 10,
+
+  imagen = "trejofrente1.png",
+  imagenFrente1 = "trejofrente1.png",
+  imagenFrente2 = "trejofrente2.png",
+  imagenDerecha1 = "trejoderecha1.png",
+  imagenDerecha2 = "trejoderecha2.png",
+  imagenIzquierda1 = "trejoizquierda1.png",
+  imagenIzquierda2 = "trejoizquierda2.png",
+  imagenEspalda1 = "trejoespalda1.png",
+  imagenEspalda2 = "trejoespalda2.png")
+  {
+  
+  const arma = new Armas(position = game.at(20,20))
+  
+  const property lasers = []
+  const property objetos = [arma]
+
+  override method kill(){
+    super()
+    sonido.play("muerteRatas.mp3")//CAMBIAR POR PAJARO
+  }
+
+  method seguir(){
+    game.onTick(1200, "perseguir", {self.perseguir()})
+  }
+
+  method disparar(){
+    
+      if (config.tenemosPistolaYnoLlena(self)){
+        new Lasers(
+        posicion = self.position(),
+        imagenFrente1 = "trejofrente1.png",
+        imagenFrente2 = "trejofrente2.png",
+        imagenDerecha1 = "trejoderecha1.png",
+        imagenDerecha2 = "trejoderecha2.png",
+        imagenIzquierda1 = "trejoizquierda1.png",
+        imagenIzquierda2 = "trejoizquierda2.png",
+        imagenEspalda1 = "trejoespalda1.png",
+        imagenEspalda2 = "trejoespalda1.png"
+        ).disparar(self)
+      }else {
+        config.tenemosPistolaCompleta(self)}
+    }
+}
