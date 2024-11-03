@@ -11,6 +11,7 @@ import Mapas.*
 class Portales {
   var image = "portal0.png"
   var position
+  var poder = 0
   //var property mapa = niveles.nivel3()
 
   method image () = image
@@ -47,7 +48,7 @@ object transicion {
 class Armas {
   var position
   var image = "arma.png"
-  var property poder = 0
+  var poder = 0
 
   method position () = position
 
@@ -71,6 +72,7 @@ class Armas {
 class Placas {
   var property position
   var property image = "placa.png" // Sin declarar en el de Rodra
+  var poder = 0
 
   method titila () {
     image = "placaPalida.png"
@@ -91,9 +93,14 @@ class Placas {
 
 class Lasers {
   var posicion
-  var imagen = "laserX.png"
-  //var property id = 0
-
+  var imagenXderecha
+  var imagenXizquierda
+  var imagenYarriba
+  var imagenYabajo
+  var sonidoArma
+  var imagen = imagenX
+  var poder = 0
+  
   var property imagenFrente1 = "rickfrente1.png"
   var property imagenFrente2 = "rickfrente2.png"
   var property imagenDerecha1 = "rickderecha1.png"
@@ -123,14 +130,33 @@ class Lasers {
     posicion = posicion.up(1)
   }
 
-  //method crearID(){
-  //  id = config.idLaser()
- // }
+  method disparoXizquierda() {
+    imagen = imagenXizquierda
+    game.addVisual(self)
+    game.onTick(200, "laser" + self.identity(), {if (self.position().x() > 0){self.laserIzquierda()} else {self.kill()}})   
+  }
+
+  method disparoXderecha() {
+    imagen = imagenXderecha
+    game.addVisual(self) 
+    game.onTick(200, "laser" + self.identity(), {if (self.position().x() < 12){self.laserDerecha()} else {self.kill()}})  
+  }
+
+  method disparoYabajo() {
+    imagen = imagenYabajo
+    game.addVisual(self) 
+    game.onTick(200, "laser" + self.identity(), {if (self.position().y() > 0){self.laserAbajo()} else {self.kill()}})   
+  }
+
+  method disparoYarriba() {
+    imagen = imagenYarriba
+    game.addVisual(self) 
+    game.onTick(200, "laser" + self.identity(), {if (self.position().y() < 12){self.laserArriba()} else {self.kill()}}) 
+  }
 
   method disparar (_entidad) {
     
-    sonido.play("disparo4.mp3")
-    //disparo.play()
+    sonido.play(sonidoArma)
     
     // Compara si ya hay 3 lasers creados. Si no es así 
     // genera un nuevo ID y agrega el laser a la pistola
@@ -146,33 +172,25 @@ class Lasers {
 
     //}
 
-    // Reseteamos la posición del rayo donde Rick.
-    posicion = _entidad.position()    
+    // Reseteamos la posición del rayo donde está la entidad
+    posicion = _entidad.position()
 
     // Logica para al traso del disparo
     if(_entidad.image() == imagenFrente1 or _entidad.image() == imagenFrente2){
       game.schedule(300, {
-        imagen = "laserY.png" 
-        game.addVisual(self) 
-        game.onTick(200, "laser" + self.identity(), {if (self.position().y() > 0){self.laserAbajo()} else {self.kill()}}) //cuando sale de la pantalla muere el rayo
+        self.disparoYabajo()
       })
     } else if(_entidad.image() == imagenIzquierda1 or _entidad.image() == imagenIzquierda2){
       game.schedule(300, {
-          imagen = "laserX.png"
-          game.addVisual(self)
-          game.onTick(200, "laser" + self.identity(), {if (self.position().x() > 0){self.laserIzquierda()} else {self.kill()}})
-      })    
+        self.disparoXizquierda()
+      })
     } else if(_entidad.image() == imagenEspalda1 or _entidad.image() == imagenEspalda2){
       game.schedule(300, {
-        imagen = "laserY.png"
-        game.addVisual(self)
-        game.onTick(200, "laser" + self.identity(), {if (self.position().y() < 12){self.laserArriba()} else {self.kill()}})
-      })  
+        self.disparoYarriba()
+      })
     } else if(_entidad.image() == imagenDerecha1 or _entidad.image() == imagenDerecha2){
       game.schedule(300, {
-        imagen = "laserX.png"
-        game.addVisual(self)
-        game.onTick(200, "laser" + self.identity(), {if (self.position().x() < 12){self.laserDerecha()} else {self.kill()}})
+        self.disparoXderecha()
       })
     } 
   }
@@ -183,7 +201,6 @@ class Lasers {
     game.removeVisual(self)
     game.removeTickEvent("laser" + self.identity())
     posicion = game.at(13,13)
-  
   }  
 }
 

@@ -26,18 +26,12 @@ class Niveles{
     game.width(ancho)
 
     config.printearLoQueTenemos()
-    self.sonidoFondo()
+
+    game.addVisual(puntosGanados)
+    game.addVisual(vidaRick)
 
   }
 
-  const sonidofondo = game.sound("fondo.mp3")
-
-  method sonidoFondo() {
-    sonidofondo.shouldLoop(true)
-    keyboard.down().onPressDo({ sonidofondo.volume(0) }) 
-    keyboard.up().onPressDo({sonidofondo.volume(1)})
-    sonidofondo.play()
-  }
 }
 
 object nivel1 inherits Niveles(
@@ -47,6 +41,7 @@ object nivel1 inherits Niveles(
 
   override method estructura(){
     super()
+    music.sonidoFondo()
 
     config.crearPortal(0,5)
     config.crearPortal(11,5)
@@ -64,9 +59,7 @@ object nivel1 inherits Niveles(
 //Gonza
       game.whenCollideDo(rick, {enemigo=> (rick.runAtacadoTick(enemigo))})
       
-      game.addVisual(vidaDanyTrejo)
-      game.addVisual(puntosGanados)
-      game.addVisual(vidaRick)
+
   }
 
 }
@@ -142,6 +135,9 @@ object nivel5 inherits Niveles(
     game.addVisual(danyTrejo)
     danyTrejo.seguir()
 
+    game.addVisual(vidaDanyTrejo)
+    sonido.play("risaMalvada.mp3")
+
     game.onTick(3000, "danyDisparo", {danyTrejo.disparar()})
 
     config.textoCharlado(3000, 6000, saludo2) //Pruebas
@@ -150,11 +146,11 @@ object nivel5 inherits Niveles(
 
 object gameOver inherits Niveles(
   fondo = gameOverImagen,
-  nombre = "nivel5")
+  nombre = "gameOver")
   {
 
   method gameOver(){
-      fondo.stop()
+
       game.clear()
       game.addVisual(fondo)
       sonido.play("gameover.mp3")
@@ -164,6 +160,8 @@ object gameOver inherits Niveles(
       rick.reiniciarVida()
       rick.reiniciarPosicion()
       rick.soltarObjetos()
+      music.paraSonidoFondo()
+      game.addVisual(vidaDanyTrejo)
     }
 }
 
@@ -175,12 +173,12 @@ object gameOverImagen {
 
 object winner inherits Niveles(
   fondo = winnerImagen,
-  nombre = "nivel5")
+  nombre = "winner")
   {
 
   method winner(){
       
-    fondo.stop()
+    music.paraSonidoFondo()
     game.clear()
     game.addVisual(fondo)
     
@@ -199,18 +197,61 @@ object winnerImagen {
     method image() = "Winner2.jpg"
 }
 
-///////falta completar
+/////// CREDITOOOOS ///////// Falta completar
 object creditos inherits Niveles(
-  fondo = winnerImagen,
-  nombre = "nivel5")
+  fondo = estrellas,
+  nombre = "creditos")
   {
   
-  method creditos(){
+  override method estructura(){
     game.clear()
     game.addVisual(fondo)
+    game.title(nombre)
+    game.height(alto) 
+    game.width(ancho)
     game.addVisual(textoQueSeDesplaza)
+    game.onTick(1200, "desplazamientos", { textoQueSeDesplaza.desplazamiento() })
+    sonido.play("sw.mp3")
   }
 }
+object estrellas {
+    method position() = game.origin()
+    method image() = "estrellas.png"
+
+}
+
+class ImagenMovible{
+    var posicion
+    var imagen
+    
+    method position() = posicion
+    
+    method image() = imagen
+    
+    method desplazamiento(){
+  	const y = (posicion.y()+1)
+		posicion = game.at(posicion.x(),y)
+		
+	}
+    
+}
+
+object joni inherits ImagenMovible(
+    posicion = game.at(5,-10),
+    imagen = "joni.png"
+){}
+object rodri inherits ImagenMovible(
+    posicion = game.at(5,-12),
+    imagen = "rodri.png"
+){}
+object nahue inherits ImagenMovible(
+    posicion = game.at(5,-14),
+    imagen = "nahue.png"
+){}
+object gonza inherits ImagenMovible(
+    posicion = game.at(5,-18),
+    imagen = "gonza1.png"
+){}
 
 /*
 object niveles {

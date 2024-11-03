@@ -130,8 +130,8 @@ class Enemigos {
 }
 
 class Ratas inherits Enemigos(
-  vida = 20,
-  poder = 5,
+  vida = 5,
+  poder = 1,
   imagen = "ratafrente1.png",
   imagenFrente1 = "ratafrente1.png",
   imagenFrente2 = "ratafrente2.png",
@@ -151,8 +151,8 @@ class Ratas inherits Enemigos(
 
 class Pepitas inherits Enemigos(
   
-  vida = 20,
-  poder = 5,
+  vida = 5,
+  poder = 1,
 
   imagen = "pepitaderecha.png",
   imagenFrente1 = "pepitaabajo.png",
@@ -192,9 +192,11 @@ object danyTrejo inherits Enemigos(
   const property lasers = []
   const property objetos = [arma]
 
+  //MODIFICAR EL KILL DEL JEFE
   override method kill(){
     super()
-    sonido.play("muerteRatas.mp3")//CAMBIAR POR PAJARO
+    //sonido.play("MuerteJefe.mp3") //HACER METODO PARA LA MUERTE LUEGO DEL DAÑO
+    sonido.play("DañoJefe.mp3")//CAMBIAR POR PAJARO
   }
 
   method seguir(){
@@ -205,7 +207,12 @@ object danyTrejo inherits Enemigos(
     
       if (config.tenemosPistolaYnoLlena(self)){
         new Lasers(
+        imagenXderecha = "cuchilloXderecha.png",
+        imagenXizquierda = "cuchilloXizquierda.png",
+        imagenYarriba = "cuchilloYarriba.png",
+        imagenYabajo = "cuchilloYabajo.png",
         posicion = self.position(),
+        sonidoArma = "cuchillo.mp3",
         imagenFrente1 = "trejofrente1.png",
         imagenFrente2 = "trejofrente2.png",
         imagenDerecha1 = "trejoderecha1.png",

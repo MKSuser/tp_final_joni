@@ -119,11 +119,11 @@ object config{
   }
 
   // Verificamos que ya tenemos X balas, por lo que las utilizamos según el "cargador" de Rick
-    method tenemosPistolaCompleta(_entidad){
+  method tenemosPistolaCompleta(_entidad){
   
-      if (not self.tenemosPistolaYnoLlena(_entidad)){
-        _entidad.lasers().find({ laser => laser.position() == game.at(13,13) }).disparar(self)
-      } 
+      //if (not self.tenemosPistolaYnoLlena(_entidad)){
+        _entidad.lasers().find({ laser => laser.position() == game.at(13,13) }).disparar(_entidad)
+      //} 
     }
 
 }
@@ -159,7 +159,7 @@ object pichium {
 }
 //////////
 
-////////////MENSAJES MENU PRINCIPAL
+////////////MENSAJES MENU PRINCIPAL//////////
 
 ///////COMENZAR
 object mensajeJugar {
@@ -174,7 +174,7 @@ object mensajeJugar {
   }
 
   method siguiente(){
-  nivel1.estructura() 
+    nivel1.estructura() 
 }
 }
 
@@ -191,9 +191,23 @@ object mensajeCreditos {
   }
   
   method siguiente(){
-    game.stop()//CAMBIAR POR NIVEL CREDITOS
+    creditos.estructura()
   }
 }
+
+object textoQueSeDesplaza {
+  var property position = game.at(5,-6) //se mide en celdas de 50 x 50px
+  
+  method text() = "En una galazia muy muy lejana"
+  method textColor() = paleta.amarillo()
+
+	method desplazamiento(){
+  	const y = (position.y()+1)
+		position = game.at(position.x(),y)
+		
+	}
+}
+
 
 ///////QUIT
 object mensajeSalir {
@@ -223,8 +237,8 @@ object puntosGanados {
 
 //////////
 object vidaDanyTrejo {
-  method position() = game.at(rick.position().x(),rick.position().y()+1)
-  method text() = "HP: " + rick.vida().toString()//cambiar a rick por danyTrejo
+  method position() = game.at(danyTrejo.position().x(),danyTrejo.position().y()+2)
+  method text() = "HP: " + danyTrejo.vida().toString()//cambiar a danyTrejo por danyTrejo
   method textColor() = paleta.rojo()
 }
 ///////////
@@ -234,18 +248,18 @@ object vidaRick {
   method textColor() = paleta.verde()
 }
 
+object music {
+  const sonidofondo = game.sound("fondo.mp3")
 
-object textoQueSeDesplaza {
-  var property position = game.at(5,-6) //se mide en celdas de 50 x 50px
-  
-  method text() = "En una galazia muy muy lejana"
-  method textColor() = paleta.amarillo()
-
-	method desplazamiento(){
-  	const y = (position.y()+1)
-		position = game.at(position.x(),y)
-		
-	}
+  method sonidoFondo() {
+    sonidofondo.shouldLoop(true)
+    keyboard.down().onPressDo({ sonidofondo.volume(0) }) 
+    keyboard.up().onPressDo({sonidofondo.volume(1)})
+    sonidofondo.play()
+  }
+  method paraSonidoFondo() {
+    sonidofondo.stop()
+  }
 }
 
 ////////DE TODO UN POCO QUE PUEDE SERVIR

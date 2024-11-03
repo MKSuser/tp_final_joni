@@ -158,7 +158,7 @@ object rick inherits Personajes(
     vida -= _enemigo.poder()   
     self.endAtacadoTick()
 
-    if (vida<=0){vida=100}// cambiar por el metodo gameOver(nahue)
+    if (vida<=0){gameOver.gameOver()}// cambiar por el metodo gameOver(nahue)
   }
 //////////////
 
@@ -170,7 +170,12 @@ object rick inherits Personajes(
     
       if (config.tenemosPistolaYnoLlena(self)){
         new Lasers(
+          imagenXderecha = "laserX.png",
+          imagenXizquierda = "laserX.png",
+          imagenYarriba = "laserY.png",
+          imagenYabajo = "laserY.png",
           posicion = self.position(),
+          sonidoArma = "disparo4.mp3",
           imagenFrente1 = "rickfrente1.png",
           imagenFrente2 = "rickfrente2.png",
           imagenDerecha1 = "rickderecha1.png",
@@ -184,7 +189,6 @@ object rick inherits Personajes(
       }else {
         config.tenemosPistolaCompleta(self)}
     }
-
 
 
 }
