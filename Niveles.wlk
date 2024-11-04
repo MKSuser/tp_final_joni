@@ -12,6 +12,8 @@ class Niveles{
   const ancho = 12 //se mide en celdas de 50 x 50px
   const alto = 12  //se mide en celdas de 50 x 50px
 
+  const property listaPlaca = []
+
   var property fondo
   const nombre
 
@@ -30,6 +32,9 @@ class Niveles{
     game.addVisual(puntosGanados)
     game.addVisual(vidaRick)
 
+    game.whenCollideDo(rick, {enemigo=> (rick.runAtacadoTick(enemigo))})
+    music.sonidoFondo()
+
   }
 
 }
@@ -41,25 +46,20 @@ object nivel1 inherits Niveles(
 
   override method estructura(){
     super()
-    music.sonidoFondo()
+    
+    //music.iniciarSonidoFondo()
 
     config.crearPortal(0,5)
     config.crearPortal(11,5)
     
-    config.crearPlaca(4,4)
-    config.crearArma(3,3)
+    config.crearArma(3,3,self)
     
     game.addVisual(rick)
 
     config.crearRata()
     config.crearRata()
     config.crearRata()
-    config.crearPepita()
-
-//Gonza
-      game.whenCollideDo(rick, {enemigo=> (rick.runAtacadoTick(enemigo))})
-      
-
+    
   }
 
 }
@@ -75,13 +75,14 @@ object nivel2 inherits Niveles(
     config.crearPortal(0,5)
     config.crearPortal(11,5)
 
-    config.crearPlaca(3,4)
+    config.crearPlaca(3,4, self)
 
     game.addVisual(rick)
     
     config.crearRata()
+    config.crearRata()
+    config.crearRata()
 
-    config.textoCharlado(3000, 6000, saludo2)//Pruebas
   }
 }
 
@@ -96,11 +97,13 @@ object nivel3 inherits Niveles(
     config.crearPortal(0,5)
     config.crearPortal(11,5)
 
-    config.crearPlaca(2,4)
+    config.crearPlaca(2,4, self)
 
     game.addVisual(rick)
     config.crearRata()
-    config.textoCharlado(3000, 6000, saludo2)//Pruebas
+    config.crearRata()
+    config.crearRata()
+
   }
 }
 
@@ -114,10 +117,13 @@ object nivel4 inherits Niveles(
     
     config.crearPortal(0,5)
     config.crearPortal(11,5)
+    config.crearPlaca(10,10, self)
 
     game.addVisual(rick)
-    config.crearRata()
-    config.textoCharlado(3000, 6000, saludo2) //Pruebas
+    config.crearPepita()
+    config.crearPepita()
+    config.crearPepita()
+
   }
 }
 
@@ -130,7 +136,7 @@ object nivel5 inherits Niveles(
     super()
     
     game.addVisual(rick)
-    config.crearRata()
+    //config.crearRata()
 
     game.addVisual(danyTrejo)
     danyTrejo.seguir()
@@ -140,7 +146,7 @@ object nivel5 inherits Niveles(
 
     game.onTick(3000, "danyDisparo", {danyTrejo.disparar()})
 
-    config.textoCharlado(3000, 6000, saludo2) //Pruebas
+
   }
 }
 
@@ -160,14 +166,17 @@ object gameOver inherits Niveles(
       rick.reiniciarVida()
       rick.reiniciarPosicion()
       rick.soltarObjetos()
-      music.paraSonidoFondo()
+      music.pararSonidoFondo()
       game.addVisual(vidaDanyTrejo)
+      
+      danyTrejo.generarVidaDany()
+      rick.reiniciarPuntos()
     }
 }
 
 object gameOverImagen {
     method position() = game.origin()
-    method image() = "GameOver2.jpg"
+    method image() = "gameOver.jpeg"
   
 }
 
@@ -178,23 +187,29 @@ object winner inherits Niveles(
 
   method winner(){
       
-    music.paraSonidoFondo()
+    //music.pararSonidoFondo()
     game.clear()
     game.addVisual(fondo)
     
-    sonido.play("winner.mp3")
+    game.schedule(3000,{sonido.play("winner4.mp3")})
+    //puntosGanados.position() = game.at(9,3)
+    
+    game.addVisual(puntosGanados)//CORREGIR LA POSICION
     
     keyboard.r().onPressDo({inicioPlap.presentacion()})
     
     rick.reiniciarVida()
     rick.reiniciarPosicion()
     rick.soltarObjetos()
+    danyTrejo.generarVidaDany()
+    rick.reiniciarPuntos()
   }
+
 }
 
 object winnerImagen {
     method position() = game.origin()
-    method image() = "Winner2.jpg"
+    method image() = "winner.jpeg"
 }
 
 /////// CREDITOOOOS ///////// Falta completar
@@ -209,9 +224,20 @@ object creditos inherits Niveles(
     game.title(nombre)
     game.height(alto) 
     game.width(ancho)
+
     game.addVisual(textoQueSeDesplaza)
-    game.onTick(1200, "desplazamientos", { textoQueSeDesplaza.desplazamiento() })
+    game.addVisual(joni)
+    game.addVisual(rodri)
+    game.addVisual(nahue)
+    game.addVisual(gonza)
+    game.onTick(1200, "desplazamientos", { textoQueSeDesplaza.desplazamiento()
+                                            joni.desplazamiento()
+                                            nahue.desplazamiento()
+                                            rodri.desplazamiento()
+                                            gonza.desplazamiento() })
     sonido.play("sw.mp3")
+    game.schedule(40000, {inicioPlap.presentacion() musicaCreditos.paraSonidoFondo()})
+    musicaCreditos.sonidoFondo()
   }
 }
 object estrellas {
@@ -236,22 +262,113 @@ class ImagenMovible{
     
 }
 
-object joni inherits ImagenMovible(
-    posicion = game.at(5,-10),
-    imagen = "joni.png"
-){}
 object rodri inherits ImagenMovible(
-    posicion = game.at(5,-12),
-    imagen = "rodri.png"
+    posicion = game.at(3,-6),
+    imagen = "zrodri.png"
 ){}
+
 object nahue inherits ImagenMovible(
-    posicion = game.at(5,-14),
-    imagen = "nahue.png"
+    posicion = game.at(3,-11),
+    imagen = "znahue.png"
 ){}
+
+object joni inherits ImagenMovible(
+    posicion = game.at(3,-16),
+    imagen = "zjoni.png"
+){}
+
 object gonza inherits ImagenMovible(
-    posicion = game.at(5,-18),
-    imagen = "gonza1.png"
+    posicion = game.at(4,-20),
+    imagen = "zgonza1.png"
 ){}
+
+object textoQueSeDesplaza {
+  var property position = game.at(5,-11) //se mide en celdas de 50 x 50px
+  
+  method text() = "
+  
+
+
+
+
+
+
+  PICKLE RICK!!
+
+
+  Integrantes:
+  
+  CASCO, Rodrigo
+  
+  
+  
+
+
+
+
+
+  
+  
+  
+  GARCÍA, Nahuel
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  GÓMEZ CIRANNA, Jonathan
+  
+  
+
+
+
+
+
+
+  
+  
+  
+  
+  LOPEZ, Gonzalo
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  Materia:
+  Algoritmos 1
+
+  Trabajo Práctico - WOLLOK Game
+
+  UNSAM (Univ.Nacional de San Martín)"
+
+  method textColor() = paleta.amarillo()
+
+	method desplazamiento(){
+  	const y = (position.y()+1)
+		position = game.at(position.x(),y)
+		
+	}
+}
 
 /*
 object niveles {

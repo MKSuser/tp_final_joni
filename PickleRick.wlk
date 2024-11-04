@@ -29,9 +29,8 @@ class Personajes {
     if(self.position().x() < (game.width() - 1)){
       sonido.play(paso)
       imageRick = imagenDerecha2
-      posicion = posicion.right(0.5)
+      posicion = posicion.right(1)
       game.schedule(200, {imageRick = imagenDerecha1})
-      posicion = posicion.right(0.5)
     }  
   }
 
@@ -39,9 +38,8 @@ class Personajes {
     if(self.position().x() > 0){
       sonido.play(paso)
       imageRick = imagenIzquierda2
-      posicion = posicion.left(0.5)
+      posicion = posicion.left(1)
       game.schedule(200, {imageRick = imagenIzquierda1})
-      posicion = posicion.left(0.5)
     }  
   }
 
@@ -49,9 +47,8 @@ class Personajes {
     if(self.position().y() < (game.height() - 2)){
       sonido.play(paso)
       imageRick = imagenEspalda2
-      posicion = posicion.up(0.5)
+      posicion = posicion.up(1)
       game.schedule(200, {imageRick = imagenEspalda1})
-      posicion = posicion.up(0.5)
     }  
   }
 
@@ -59,9 +56,8 @@ class Personajes {
     if(self.position().y() > 0){
       sonido.play(paso)
       imageRick = imagenFrente2
-      posicion = posicion.down(0.5)
+      posicion = posicion.down(1)
       game.schedule(200, {imageRick = imagenFrente1})
-      posicion = posicion.down(0.5)
     }  
   }
 }
@@ -189,6 +185,14 @@ object rick inherits Personajes(
       }else {
         config.tenemosPistolaCompleta(self)}
     }
+  
+  method reiniciarPuntos(){
+    puntos = 0
+  }
 
+  method kill(){
+    vida -= 25
+  }
 
 }
+

@@ -9,8 +9,10 @@ import Niveles.*
 // Aca van los enemigos. Las ratas y el enemigo Final
 
 class Enemigos {
-  var property vida
+  var property vida = 0
   var property poder
+  var property puntos
+
   var property posicion = game.at((-1.randomUpTo(12)).randomUpTo(12).truncate(0),(-1.randomUpTo(12)).randomUpTo(12).truncate(0))
 
   method morir() {
@@ -124,14 +126,14 @@ class Enemigos {
       //game.removeTickEvent("perseguir" + self.identity())
       //muerteRatas.play()
       posicion = game.at((-1.randomUpTo(12)).randomUpTo(12).truncate(0),(-1.randomUpTo(12)).randomUpTo(12).truncate(0))
-      rick.puntos(self.vida())
+      rick.puntos(self.puntos())
   }
 
 }
 
 class Ratas inherits Enemigos(
-  vida = 5,
   poder = 1,
+  puntos = 2,
   imagen = "ratafrente1.png",
   imagenFrente1 = "ratafrente1.png",
   imagenFrente2 = "ratafrente2.png",
@@ -150,10 +152,8 @@ class Ratas inherits Enemigos(
 }
 
 class Pepitas inherits Enemigos(
-  
-  vida = 5,
-  poder = 1,
-
+  poder = 3,
+  puntos = 5,
   imagen = "pepitaderecha.png",
   imagenFrente1 = "pepitaabajo.png",
   imagenFrente2 = "pepitaabajo.png",
@@ -167,7 +167,7 @@ class Pepitas inherits Enemigos(
 
   override method kill(){
     super()
-    sonido.play("muerteRatas.mp3")//CAMBIAR POR PAJARO
+    sonido.play("muertePepita.mp3")//CAMBIAR POR PAJARO
   }
 
 }
@@ -175,6 +175,9 @@ object danyTrejo inherits Enemigos(
   
   vida = 100,
   poder = 10,
+  puntos = 100,
+
+  posicion = game.at(10,10),
 
   imagen = "trejofrente1.png",
   imagenFrente1 = "trejofrente1.png",
@@ -192,13 +195,6 @@ object danyTrejo inherits Enemigos(
   const property lasers = []
   const property objetos = [arma]
 
-  //MODIFICAR EL KILL DEL JEFE
-  override method kill(){
-    super()
-    //sonido.play("MuerteJefe.mp3") //HACER METODO PARA LA MUERTE LUEGO DEL DAÑO
-    sonido.play("DañoJefe.mp3")//CAMBIAR POR PAJARO
-  }
-
   method seguir(){
     game.onTick(1200, "perseguir", {self.perseguir()})
   }
@@ -207,6 +203,7 @@ object danyTrejo inherits Enemigos(
     
       if (config.tenemosPistolaYnoLlena(self)){
         new Lasers(
+        //poder = 10,
         imagenXderecha = "cuchilloXderecha.png",
         imagenXizquierda = "cuchilloXizquierda.png",
         imagenYarriba = "cuchilloYarriba.png",
@@ -225,4 +222,21 @@ object danyTrejo inherits Enemigos(
       }else {
         config.tenemosPistolaCompleta(self)}
     }
+
+  method generarVidaDany(){
+    vida = 100
+
+  }
+
+  override method kill(){
+    sonido.play("DañoJefe.mp3")
+    vida -= 100//CAMBIAR POR DAÑO DE LASER
+    if(vida <= 0){
+      sonido.play("MuerteJefe.mp3")
+      game.schedule(1000, {winner.winner()})
+      rick.puntos(self.puntos())
+
+    }
+  }
+    
 }

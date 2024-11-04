@@ -67,17 +67,21 @@ object config{
   }
   
   // Creador de placas
-  method crearPlaca(x,y){
+  method crearPlaca(x,y, _nivel){
     const placa = new Placas(position = game.at(x,y))
     game.addVisual(placa)
     game.onTick(2000, "titilaPlaca", {placa.titila()})
+    if(_nivel.listaPlaca().size() == 0) {
+      _nivel.listaPlaca().add(self)
+    }
   }
 
   // Creador de armas
-  method crearArma(x,y){
+  method crearArma(x,y, _nivel){
     const arma = new Armas(position = game.at(x,y))
     game.addVisual(arma)
     game.onTick(2000, "titilaArma", {arma.titila()})
+    _nivel.listaPlaca().add(self)
   }
   
   // Creador de ratas
@@ -121,15 +125,15 @@ object config{
   // Verificamos que ya tenemos X balas, por lo que las utilizamos según el "cargador" de Rick
   method tenemosPistolaCompleta(_entidad){
   
-      //if (not self.tenemosPistolaYnoLlena(_entidad)){
+      if (not self.tenemosPistolaYnoLlena(_entidad)){
         _entidad.lasers().find({ laser => laser.position() == game.at(13,13) }).disparar(_entidad)
-      //} 
+      } 
     }
 
 }
 
 
-// Paleta para uso de colores
+//////////////// PALETA PARA USO DE COLORES
 object paleta {
   const property verde = "00FF00"
   const property rojo = "FF0000"
@@ -137,9 +141,6 @@ object paleta {
   const property amarillo = "FFFF00"
   const property negro = "000000"
 }
-
-
-/////////Textos game.say/////////
 
 //////////PRUEBAS
 object prueba{  
@@ -163,14 +164,14 @@ object pichium {
 
 ///////COMENZAR
 object mensajeJugar {
-  var property color = "#ffffffff"
+  var property color = paleta.blanco()
   method position() = game.at(5,6) 
   method text() = "COMENZAR"
   method textColor() = color
   
   method cambiaColor() {
     color = "008000"
-    game.schedule(500, {color = "#ffffffff"})
+    game.schedule(500, {color = paleta.blanco()})
   }
 
   method siguiente(){
@@ -180,14 +181,14 @@ object mensajeJugar {
 
 ///////CREDITOS
 object mensajeCreditos {
-  var property color = "#ffffffff"
+  var property color = paleta.blanco()
   method position() = game.at(5,4) 
   method text() = "CRÉDITOS"
   method textColor() = color
   
   method cambiaColor() {
     color = "9B9B9B"
-    game.schedule(500, {color = "#ffffffff"})
+    game.schedule(500, {color = paleta.blanco()})
   }
   
   method siguiente(){
@@ -195,30 +196,17 @@ object mensajeCreditos {
   }
 }
 
-object textoQueSeDesplaza {
-  var property position = game.at(5,-6) //se mide en celdas de 50 x 50px
-  
-  method text() = "En una galazia muy muy lejana"
-  method textColor() = paleta.amarillo()
-
-	method desplazamiento(){
-  	const y = (position.y()+1)
-		position = game.at(position.x(),y)
-		
-	}
-}
-
 
 ///////QUIT
 object mensajeSalir {
-  var property color = "#ffffffff"
+  var property color = paleta.blanco()
   method position() = game.at(5,2)
   method text() = "SALIR"
   method textColor() = color
   
   method cambiaColor() {
     color = "8B0000"
-    game.schedule(500, {color = "#ffffffff"})
+    game.schedule(500, {color = paleta.blanco()})
   }
   
   method siguiente(){
@@ -232,14 +220,17 @@ object mensajeSalir {
 object puntosGanados {
   var property position = game.at(7,11) 
   method text() = "Puntaje: " + rick.puntos().toString()
-  method textColor() = paleta.blanco()
+  method textColor() = paleta.blanco()  
 }
 
 //////////
 object vidaDanyTrejo {
+  var property poder = 0
+
   method position() = game.at(danyTrejo.position().x(),danyTrejo.position().y()+2)
   method text() = "HP: " + danyTrejo.vida().toString()//cambiar a danyTrejo por danyTrejo
   method textColor() = paleta.rojo()
+
 }
 ///////////
 object vidaRick {
@@ -248,29 +239,36 @@ object vidaRick {
   method textColor() = paleta.verde()
 }
 
-object music {
-  const sonidofondo = game.sound("fondo.mp3")
+/////////////////////// MUSICA
+class Music{
+  var property sonidofondo 
 
   method sonidoFondo() {
     sonidofondo.shouldLoop(true)
     keyboard.down().onPressDo({ sonidofondo.volume(0) }) 
     keyboard.up().onPressDo({sonidofondo.volume(1)})
+  }
+
+  method iniciarSonidoFondo(){
     sonidofondo.play()
   }
-  method paraSonidoFondo() {
+  method pararSonidoFondo() {
     sonidofondo.stop()
   }
 }
 
-////////DE TODO UN POCO QUE PUEDE SERVIR
+object music inherits Music(
+  
+  sonidofondo = game.sound("fondo.mp3")
 
-/* TEXTO PARA IMPRIMIR COSAS CON STRING
-object inventario sRick{
-  method text() = "Partes de ArmaPortal:" + rick.objetos().toString() + "
-  Lasers:" + rick.lasers().get(0).id().toString() + rick.lasers().get(1).id().toString() + rick.lasers().get(2).id().toString()
-  //placa.contarPlacas().toString() 
-  /*+ "perro:" + 3.toString() + "
-  gilada:" + paleta.amarillo().toString()
-  const lista = [paleta, saludo2]
-}
-*/
+){}
+
+object musicaCreditos inherits Music(
+  sonidofondo = game.sound("sw.mp3")
+
+){}
+
+object musicaMenu inherits Music(
+  sonidofondo = game.sound("Menu.mp3")
+
+){}

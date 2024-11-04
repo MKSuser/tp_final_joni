@@ -44,6 +44,7 @@ object selectMenu {
         config.configurarTeclasRickPosta()
       
         game.whenCollideDo(rickPosta, {mensaje=> mensaje.cambiaColor()})
+        
     }
 }
 

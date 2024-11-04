@@ -11,7 +11,7 @@ import Mapas.*
 class Portales {
   var image = "portal0.png"
   var position
-  var poder = 0
+  var property poder = 0
   //var property mapa = niveles.nivel3()
 
   method image () = image
@@ -48,7 +48,7 @@ object transicion {
 class Armas {
   var position
   var image = "arma.png"
-  var poder = 0
+  var property poder = 0
 
   method position () = position
 
@@ -65,14 +65,17 @@ class Armas {
  
   method agarrado(objeto) {
     self.mover(objeto)
-    game.removeTickEvent("titilaArma") 
+    game.removeTickEvent("titilaArma")
+    (mapaRandom.nivelActual()).listaPlaca().remove(self)
+    mapaRandom.removerMapaLista(mapaRandom.nivelActual())
   }
+
 }
 
 class Placas {
   var property position
   var property image = "placa.png" // Sin declarar en el de Rodra
-  var poder = 0
+  var property poder = 0
 
   method titila () {
     image = "placaPalida.png"
@@ -82,13 +85,14 @@ class Placas {
   method mover(objeto){
     position = game.at(config.listarPlacas().size(),11)
   }
-  
+
   method agarrado(objeto) {
-    //game.removeVisual(objeto)
-    //objeto.mover(objeto)
     game.removeTickEvent("titilaPlaca")
     self.mover(objeto)
+    (mapaRandom.nivelActual()).listaPlaca().remove(self)
+    mapaRandom.removerMapaLista(mapaRandom.nivelActual())
   }
+
 }
 
 class Lasers {
@@ -98,8 +102,8 @@ class Lasers {
   var imagenYarriba
   var imagenYabajo
   var sonidoArma
-  var imagen = imagenX
-  var poder = 0
+  var imagen = imagenXderecha
+  var property poder = 0
   
   var property imagenFrente1 = "rickfrente1.png"
   var property imagenFrente2 = "rickfrente2.png"
