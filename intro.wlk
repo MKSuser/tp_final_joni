@@ -5,24 +5,24 @@ import Config.*
 import Mapas.*
 import Niveles.*
 
+/////////////// INTRO + MENU PRINCIPAL
 object inicioPlap {
   const ancho = 12
   const alto = 12
 
   method presentacion(){
+    game.clear()
     game.title("Pickle Rick")
     game.height(alto) 
     game.width(ancho)
+
+    rick.reiniciarPuntos() //SI REINICIAS EL JUEGO DE CUALQUIER MANERA ACÁ TE LIMPIA LOS PUNTOS
 
     sonido.play("plap.mp3")    
     game.addVisual(imagenPlap)
     game.schedule(4000, {selectMenu.inicio()})
   }
   
-}
-object imagenPlap{
-  method position() = game.origin()
-  method image() = "plap.jpeg"
 }
 
 object selectMenu {
@@ -42,13 +42,10 @@ object selectMenu {
         game.addVisual(mensajeCreditos)
         game.addVisual(mensajeSalir)
         config.configurarTeclasRickPosta()
+        musicaMenu.iniciarSonidoFondo()
       
         game.whenCollideDo(rickPosta, {mensaje=> mensaje.cambiaColor()})
         
     }
 }
 
-object fondoSelect {
-  method image () = "menuSeleccion.jpg"
-  method position() = game.at(0,0) 
-}

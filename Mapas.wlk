@@ -34,8 +34,18 @@ const mapa4 = new Mapas (imagen = "fondoPiedra.jpg") //LA FINAL
 //Selecciona un mapa random a menos que tenga los 4 objetos y va a la final
 
 object mapaRandom {
-  const listaNiveles = [nivel1, nivel2, nivel3, nivel4]
+  const listaNiveles = #{nivel1, nivel2, nivel3, nivel4}
   var property nivelActual = nivel1
+
+  //const listaTodosLosNiveles = [nivel1, nivel2, nivel3, nivel4]
+
+  method llenarListaNiveles () {
+    listaNiveles.add(nivel1)
+    listaNiveles.add(nivel2)
+    listaNiveles.add(nivel3)
+    listaNiveles.add(nivel4)
+    nivelActual = nivel1
+  }
 
   method transicionMapa(_mapa) {
     sonido.play("mapaTransicion3.mp3")
@@ -57,19 +67,8 @@ object mapaRandom {
     var nivelElegido = listaNiveles.anyOne()
 
     nivelActual = nivelElegido
-    
-    if (nivelElegido == nivel1) {
-      self.transicionMapa(nivelElegido)
-    }
-    else if (nivelElegido == nivel2) {
-      self.transicionMapa(nivelElegido)
-    }
-    else if (nivelElegido == nivel3) {
-      self.transicionMapa(nivelElegido)
-    }
-    else if (nivelElegido == nivel4) {
-      self.transicionMapa(nivelElegido)
-    }
+
+    self.transicionMapa(nivelElegido)
   }
   
 }

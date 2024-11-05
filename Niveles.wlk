@@ -17,6 +17,16 @@ class Niveles{
   var property fondo
   const nombre
 
+  method agregarALista(_objeto) {
+    listaPlaca.add(_objeto)
+  }
+
+  method borrarDeLista(_objeto) {
+    listaPlaca.remove(_objeto)
+  }
+
+  method reiniciarListaPlaca() = listaPlaca.clear()
+
   method estructura(){
 
     game.clear()
@@ -33,7 +43,7 @@ class Niveles{
     game.addVisual(vidaRick)
 
     game.whenCollideDo(rick, {enemigo=> (rick.runAtacadoTick(enemigo))})
-    music.sonidoFondo()
+    
 
   }
 
@@ -41,13 +51,12 @@ class Niveles{
 
 object nivel1 inherits Niveles(
   fondo = mapa0,
-  nombre = "nivel1"
-){
+  nombre = "nivel1"){
 
   override method estructura(){
     super()
-    
-    //music.iniciarSonidoFondo()
+    config.textoCharlado(0,3000,nombreNivel1)
+    config.textoCharlado(0,4000,holaRatas)
 
     config.crearPortal(0,5)
     config.crearPortal(11,5)
@@ -66,11 +75,11 @@ object nivel1 inherits Niveles(
 
 object nivel2 inherits Niveles(
   fondo = mapa1,
-  nombre = "nivel2"
-){
+  nombre = "nivel2"){
 
   override method estructura(){
     super()
+    config.textoCharlado(0,4000,nombreNivel2)
     
     config.crearPortal(0,5)
     config.crearPortal(11,5)
@@ -88,11 +97,11 @@ object nivel2 inherits Niveles(
 
 object nivel3 inherits Niveles(
   fondo = mapa2,
-  nombre = "nivel3"
-){
+  nombre = "nivel3"){
 
   override method estructura(){
     super()
+    config.textoCharlado(0,4000,nombreNivel3)
     
     config.crearPortal(0,5)
     config.crearPortal(11,5)
@@ -109,12 +118,13 @@ object nivel3 inherits Niveles(
 
 object nivel4 inherits Niveles(
   fondo = mapa3,
-  nombre = "nivel4"
-){
+  nombre = "nivel4"){
 
   override method estructura(){
     super()
-    
+    config.textoCharlado(0,4000,nombreNivel4)
+    config.textoCharlado(0,4000,holaPepita)
+
     config.crearPortal(0,5)
     config.crearPortal(11,5)
     config.crearPlaca(10,10, self)
@@ -129,14 +139,14 @@ object nivel4 inherits Niveles(
 
 object nivel5 inherits Niveles(
   fondo = mapa4,
-  nombre = "nivel5"
-){
+  nombre = "nivel5"){
 
   override method estructura(){
     super()
+    config.textoCharlado(0,4000,nombreNivel5)
+    config.textoCharlado(0,4000,holaDany)
     
     game.addVisual(rick)
-    //config.crearRata()
 
     game.addVisual(danyTrejo)
     danyTrejo.seguir()
@@ -155,29 +165,32 @@ object gameOver inherits Niveles(
   nombre = "gameOver")
   {
 
+  method reiniciarListasPlacas() {
+    nivel1.reiniciarListaPlaca()
+    nivel2.reiniciarListaPlaca()
+    nivel3.reiniciarListaPlaca()
+    nivel4.reiniciarListaPlaca()
+  }  
+
   method gameOver(){
 
       game.clear()
+      music.pararSonidoFondo()
       game.addVisual(fondo)
       sonido.play("gameover.mp3")
      
       keyboard.r().onPressDo({inicioPlap.presentacion()})
+      keyboard.s().onPressDo({game.stop()})
       
       rick.reiniciarVida()
       rick.reiniciarPosicion()
+      rickPosta.reiniciarPosicion()
       rick.soltarObjetos()
-      music.pararSonidoFondo()
-      game.addVisual(vidaDanyTrejo)
-      
       danyTrejo.generarVidaDany()
-      rick.reiniciarPuntos()
-    }
-}
+      self.reiniciarListasPlacas()
+      mapaRandom.llenarListaNiveles()
 
-object gameOverImagen {
-    method position() = game.origin()
-    method image() = "gameOver.jpeg"
-  
+    }
 }
 
 object winner inherits Niveles(
@@ -185,31 +198,36 @@ object winner inherits Niveles(
   nombre = "winner")
   {
 
+  method reiniciarListasPlacas() {
+    nivel1.reiniciarListaPlaca()
+    nivel2.reiniciarListaPlaca()
+    nivel3.reiniciarListaPlaca()
+    nivel4.reiniciarListaPlaca()
+  }  
+  
   method winner(){
-      
-    //music.pararSonidoFondo()
+    
     game.clear()
+    music.pararSonidoFondo()
     game.addVisual(fondo)
     
-    game.schedule(3000,{sonido.play("winner4.mp3")})
-    //puntosGanados.position() = game.at(9,3)
+    game.schedule(1000,{sonido.play("winner99.mp3")})
     
-    game.addVisual(puntosGanados)//CORREGIR LA POSICION
+    game.addVisual(ganaste)
+    game.addVisual(puntosTotales)
     
     keyboard.r().onPressDo({inicioPlap.presentacion()})
+    keyboard.s().onPressDo({game.stop()})
     
     rick.reiniciarVida()
     rick.reiniciarPosicion()
+    rickPosta.reiniciarPosicion()
     rick.soltarObjetos()
     danyTrejo.generarVidaDany()
-    rick.reiniciarPuntos()
+    self.reiniciarListasPlacas()
+    mapaRandom.llenarListaNiveles()
   }
 
-}
-
-object winnerImagen {
-    method position() = game.origin()
-    method image() = "winner.jpeg"
 }
 
 /////// CREDITOOOOS ///////// Falta completar
@@ -220,6 +238,7 @@ object creditos inherits Niveles(
   
   override method estructura(){
     game.clear()
+    musicaCreditos.iniciarSonidoFondo()
     game.addVisual(fondo)
     game.title(nombre)
     game.height(alto) 
@@ -236,139 +255,48 @@ object creditos inherits Niveles(
                                             rodri.desplazamiento()
                                             gonza.desplazamiento() })
     sonido.play("sw.mp3")
-    game.schedule(40000, {inicioPlap.presentacion() musicaCreditos.paraSonidoFondo()})
-    musicaCreditos.sonidoFondo()
+    game.schedule(45000, {game.removeTickEvent("desplazamientos")
+                          musicaCreditos.pararSonidoFondo()
+                          config.resetearPosicionesCreditos()
+                          inicioPlap.presentacion()})                
+    
   }
 }
-object estrellas {
-    method position() = game.origin()
-    method image() = "estrellas.png"
 
+object comic inherits Niveles(
+  fondo = comicImagen,
+  nombre = "creditos")
+  {
+  
+  override method estructura(){
+    game.clear()
+    game.addVisual(fondo)
+    game.title(nombre)
+    game.height(alto) 
+    game.width(ancho)
+    game.schedule(1000, {game.addVisual(cuadro1)})
+    game.schedule(2500, {game.addVisual(cuadro2)})
+    game.schedule(4000, {game.addVisual(cuadro3)})
+    game.schedule(5500, {game.addVisual(cuadro4)})
+    game.schedule(7000, {game.addVisual(cuadro5)})
+    game.schedule(8500, {game.addVisual(cuadro6)})
+    /*game.addVisual(cuadro2)
+    game.addVisual(cuadro3)
+    game.addVisual(cuadro4)
+    game.addVisual(cuadro5)
+    game.addVisual(cuadro6)
+*/
+    game.schedule(1500, { keyboard.e().onPressDo({ musicaMenu.pararSonidoFondo() 
+                                                  music.iniciarSonidoFondo()
+                                                  nivel1.estructura()})})
+    //keyboard.e().onPressDo({ rick.esPortal(game.uniqueCollider(rick))})
+
+
+
+  }
 }
 
-class ImagenMovible{
-    var posicion
-    var imagen
-    
-    method position() = posicion
-    
-    method image() = imagen
-    
-    method desplazamiento(){
-  	const y = (posicion.y()+1)
-		posicion = game.at(posicion.x(),y)
-		
-	}
-    
-}
 
-object rodri inherits ImagenMovible(
-    posicion = game.at(3,-6),
-    imagen = "zrodri.png"
-){}
-
-object nahue inherits ImagenMovible(
-    posicion = game.at(3,-11),
-    imagen = "znahue.png"
-){}
-
-object joni inherits ImagenMovible(
-    posicion = game.at(3,-16),
-    imagen = "zjoni.png"
-){}
-
-object gonza inherits ImagenMovible(
-    posicion = game.at(4,-20),
-    imagen = "zgonza1.png"
-){}
-
-object textoQueSeDesplaza {
-  var property position = game.at(5,-11) //se mide en celdas de 50 x 50px
-  
-  method text() = "
-  
-
-
-
-
-
-
-  PICKLE RICK!!
-
-
-  Integrantes:
-  
-  CASCO, Rodrigo
-  
-  
-  
-
-
-
-
-
-  
-  
-  
-  GARCÍA, Nahuel
-  
-  
-
-
-
-
-
-
-
-
-
-  
-  
-  
-  GÓMEZ CIRANNA, Jonathan
-  
-  
-
-
-
-
-
-
-  
-  
-  
-  
-  LOPEZ, Gonzalo
-  
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  Materia:
-  Algoritmos 1
-
-  Trabajo Práctico - WOLLOK Game
-
-  UNSAM (Univ.Nacional de San Martín)"
-
-  method textColor() = paleta.amarillo()
-
-	method desplazamiento(){
-  	const y = (position.y()+1)
-		position = game.at(position.x(),y)
-		
-	}
-}
 
 /*
 object niveles {

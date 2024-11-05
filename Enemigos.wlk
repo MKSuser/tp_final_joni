@@ -20,8 +20,8 @@ class Enemigos {
 
   }
 
-  method vidaRestar(x) {
-  self.vida()-x.poder()
+  method vidaRestar(_entidad) {
+  self.vida()-_entidad.poder()
   }
 
   var property imagen
@@ -120,7 +120,7 @@ class Enemigos {
     game.onTick(800, "perseguir" + self.identity(), {self.perseguir()})
   }
 
-// Mutee los primeros 2 porque al final solo cambiamos la posición para "matarlas" 
+  // Mutee los primeros 2 porque al final solo cambiamos la posición para "matarlas" 
   method kill(){
       //game.removeVisual(self)
       //game.removeTickEvent("perseguir" + self.identity())
@@ -230,12 +230,15 @@ object danyTrejo inherits Enemigos(
 
   override method kill(){
     sonido.play("DañoJefe.mp3")
-    vida -= 100//CAMBIAR POR DAÑO DE LASER
+    vida -= 20 //CAMBIAR POR DAÑO LASER
     if(vida <= 0){
       sonido.play("MuerteJefe.mp3")
-      game.schedule(1000, {winner.winner()})
+      game.removeVisual(self)
+      game.removeVisual(vidaDanyTrejo)
+      game.removeTickEvent("perseguir")
+      game.removeTickEvent("danyDisparo")
+      game.schedule(4000, {winner.winner()})
       rick.puntos(self.puntos())
-
     }
   }
     

@@ -77,10 +77,15 @@ object rickPosta inherits Personajes(
   paso = "vacio")
   {
 
-method seleccionador(objeto){//CAMBIAR NOMBRE A QUE AGARRAMOS
-    if (selectMenu.mensajes().contains(objeto)){
-      objeto.siguiente()
+  method seleccionador(objeto){//CAMBIAR NOMBRE A QUE AGARRAMOS
+      if (selectMenu.mensajes().contains(objeto)){
+        objeto.siguiente()
+      }
     }
+
+  method reiniciarPosicion(){
+    posicion = game.at(1,2)
+    imageRick = "rickPostafrente1.png"
   }
 }
 
@@ -104,9 +109,8 @@ object rick inherits Personajes(
   
   var property vida = 100 // vida inicial de rick
 
-/////////Cosas de Nahue
   method reiniciarVida(){
-    vida = 50
+    vida = 100
   }
 
   method reiniciarPosicion(){
@@ -118,7 +122,7 @@ object rick inherits Personajes(
     objetos.clear()
     lasers.clear()
   }
-////////////
+
   method vidaRestar(x) {
     self.vida()-x.poder()
   }//Se le resta a la vida el poder del personaje que lo ataque
@@ -137,7 +141,6 @@ object rick inherits Personajes(
     
   }
 
-/////////Cosas de Gonza  
   var property puntos = 0
   
   method puntos(matasteA) {
@@ -156,7 +159,6 @@ object rick inherits Personajes(
 
     if (vida<=0){gameOver.gameOver()}// cambiar por el metodo gameOver(nahue)
   }
-//////////////
 
   // Llamada de los metodos anteriores para consulta de balas en pistola.
   // Si se cumple la primer condi generamos un nuevo laser

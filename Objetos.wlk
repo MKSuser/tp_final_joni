@@ -64,9 +64,10 @@ class Armas {
   }
  
   method agarrado(objeto) {
+    config.textoCharlado(0,4000,pichium)
     self.mover(objeto)
     game.removeTickEvent("titilaArma")
-    (mapaRandom.nivelActual()).listaPlaca().remove(self)
+    (mapaRandom.nivelActual()).borrarDeLista(self)
     mapaRandom.removerMapaLista(mapaRandom.nivelActual())
   }
 
@@ -208,10 +209,3 @@ class Lasers {
   }  
 }
 
-object sonido{
-
-  method play(sonido){
-    game.sound(sonido).play()
-  }
-
-}
